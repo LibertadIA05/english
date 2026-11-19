@@ -33,7 +33,15 @@
     'to be hot': ['to be warm'], 'last night': ['yesterday evening'], 'colleague': ['coworker'], 'company': ['firm', 'business'],
     'salary': ['wage', 'pay'], 'fever': ['temperature'], 'pharmacy': ['chemist', "chemist's", 'drugstore'], 'stairs': ['staircase'],
     'trip': ['journey'], 'to book': ['to reserve'], 'countryside': ['country'], 'to move': ['to move house'], 'difficult': ['hard'],
-    'noisy': ['loud'], 'phone': ['telephone', 'mobile'], 'to call': ['to phone', 'to ring'], 'angry': ['mad', 'cross']
+    'noisy': ['loud'], 'phone': ['telephone', 'mobile'], 'to call': ['to phone', 'to ring'], 'angry': ['mad', 'cross'],
+    'so far': ['until now', 'up to now'], 'recently': ['lately'], 'skydiving': ['parachuting'],
+    'scuba diving': ['diving'], 'in my opinion': ['in my view'], 'obviously': ['clearly', 'of course'],
+    'disadvantage': ['drawback'], 'faulty': ['defective'], 'to exchange': ['to swap'],
+    'compulsory': ['mandatory', 'obligatory'], 'allowed': ['permitted'],
+    'forbidden': ['banned', 'prohibited', 'not allowed'], 'boarding pass': ['boarding card'],
+    'connecting flight': ['connection'], 'fit': ['in shape'], 'exhausted': ['worn out'], 'nap': ['siesta'],
+    'social media': ['social networks'], 'internship': ['work placement', 'placement'], 'to hire': ['to employ'],
+    'to get on with': ['to get along with'], 'to break up': ['to split up'], 'to keep in touch': ['to stay in touch']
   };
 
   const LEVEL_DEFS = [
@@ -258,7 +266,7 @@
     }
     st.rest = rest.slice(-12);
     st.last = addDays(t, -1);
-    S.notice = { type: 'rest', count: st.count };
+    S.notice = { type: 'rest', count: st.count, day: t };
     save();
   }
   function markActive() {
@@ -526,7 +534,7 @@
     const learned = hasLearned();
     let h = topbar() + '<main class="scroll">';
 
-    if (S.notice && S.notice.type === 'rest') {
+    if (S.notice && S.notice.type === 'rest' && S.streak.count > 0 && (!S.notice.day || dayDiff(S.notice.day, today()) <= 1)) {
       h += `<div class="notice"><span aria-hidden="true">😌</span><p>Jour de repos utilisé : ta série de <b>${plural(S.notice.count, 'jour')}</b> est sauvée. Tu as droit à 1 jour de repos par semaine.</p><button class="icon-btn" data-act="dismiss-notice" aria-label="Fermer">${IC.close}</button></div>`;
     }
     if (!S.installTip && !isStandalone()) {
