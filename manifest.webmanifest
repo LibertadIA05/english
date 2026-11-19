@@ -1,7 +1,7 @@
 {
-  "name": "Tea Time · Anglais A1",
+  "name": "Tea Time · Anglais",
   "short_name": "Tea Time",
-  "description": "Apprendre l'anglais facilement, niveau A1, sans pub ni vies.",
+  "description": "Apprendre l'anglais facilement, du niveau A1 au B1, sans pub ni vies.",
   "lang": "fr",
   "start_url": "./",
   "scope": "./",

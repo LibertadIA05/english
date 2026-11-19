@@ -1,9 +1,9 @@
 // Contenu du cours — niveau A1
 // vocab :     [anglais, français, emoji]
 // sentences : [anglais, français, [autres réponses anglaises acceptées]]
-// blanks :    [phrase avec ___, bonne réponse, [options], traduction, astuce si erreur]
+// blanks :    [phrase avec ___, bonne réponse, [options], traduction, astuce si erreur, point de grammaire]
 
-window.COURSE = [
+window.COURSE_A1 = [
   {
     id: "u1", emoji: "👋", title: "Bonjour !", subtitle: "Saluer et se présenter", color: "#FF7A45",
     vocab: [
@@ -33,10 +33,10 @@ window.COURSE = [
       ["Can you repeat, please?", "Pouvez-vous répéter, s'il vous plaît ?", ["Could you repeat, please?", "Can you repeat that, please?", "Could you repeat that, please?"]]
     ],
     blanks: [
-      ["I ___ French.", "am", ["am", "is", "are"], "Je suis français.", "Avec I, on utilise toujours am."],
-      ["You ___ my friend.", "are", ["am", "is", "are"], "Tu es mon ami.", "Avec you, on utilise are."],
-      ["___ name is Tom.", "My", ["My", "I", "Me"], "Je m'appelle Tom.", "my = mon / ma (ce qui m'appartient)."],
-      ["How ___ you?", "are", ["is", "are", "am"], "Comment vas-tu ?", "How are you? est une formule figée : avec you, toujours are."]
+      ["I ___ French.", "am", ["am", "is", "are"], "Je suis français.", "Avec I, on utilise toujours am.", "Verbe be (am / is / are)"],
+      ["You ___ my friend.", "are", ["am", "is", "are"], "Tu es mon ami.", "Avec you, on utilise are.", "Verbe be (am / is / are)"],
+      ["___ name is Tom.", "My", ["My", "I", "Me"], "Je m'appelle Tom.", "my = mon / ma (ce qui m'appartient).", "Possessifs (my / his / her)"],
+      ["How ___ you?", "are", ["is", "are", "am"], "Comment vas-tu ?", "How are you? est une formule figée : avec you, toujours are.", "Verbe be (am / is / are)"]
     ]
   },
   {
@@ -68,10 +68,10 @@ window.COURSE = [
       ["My son is eight.", "Mon fils a huit ans.", ["My son is eight years old."]]
     ],
     blanks: [
-      ["I am thirty years ___.", "old", ["old", "age", "year"], "J'ai trente ans.", "En anglais, on « est » son âge : I am 30 years old."],
-      ["How ___ are you?", "old", ["old", "many", "much"], "Quel âge as-tu ?", "Pour demander l'âge : How old are you?"],
-      ["I ___ two children.", "have", ["have", "am", "has"], "J'ai deux enfants.", "I have = j'ai."],
-      ["She ___ twenty.", "is", ["is", "are", "has"], "Elle a vingt ans.", "Pour l'âge, on utilise be (is), pas have."]
+      ["I am thirty years ___.", "old", ["old", "age", "year"], "J'ai trente ans.", "En anglais, on « est » son âge : I am 30 years old.", "L'âge (be + old)"],
+      ["How ___ are you?", "old", ["old", "many", "much"], "Quel âge as-tu ?", "Pour demander l'âge : How old are you?", "L'âge (be + old)"],
+      ["I ___ two children.", "have", ["have", "am", "has"], "J'ai deux enfants.", "I have = j'ai.", "Verbe have"],
+      ["She ___ twenty.", "is", ["is", "are", "has"], "Elle a vingt ans.", "Pour l'âge, on utilise be (is), pas have.", "L'âge (be + old)"]
     ]
   },
   {
@@ -103,10 +103,10 @@ window.COURSE = [
       ["I love my family.", "J'aime ma famille.", ["I like my family."]]
     ],
     blanks: [
-      ["This ___ my brother.", "is", ["is", "are", "am"], "Voici mon frère.", "This is = voici / c'est."],
-      ["I have ___ sister.", "a", ["a", "an", "two"], "J'ai une sœur.", "Devant un son consonne : a. Devant un son voyelle : an."],
-      ["___ name is Paul. He is my father.", "His", ["His", "Her", "Your"], "Il s'appelle Paul. C'est mon père.", "his = son / sa pour un homme, her = son / sa pour une femme."],
-      ["My sister ___ two children.", "has", ["has", "have", "is"], "Ma sœur a deux enfants.", "Avec he / she / it : has (pas have)."]
+      ["This ___ my brother.", "is", ["is", "are", "am"], "Voici mon frère.", "This is = voici / c'est.", "Verbe be (am / is / are)"],
+      ["I have ___ sister.", "a", ["a", "an", "two"], "J'ai une sœur.", "Devant un son consonne : a. Devant un son voyelle : an.", "Articles (a / an)"],
+      ["___ name is Paul. He is my father.", "His", ["His", "Her", "Your"], "Il s'appelle Paul. C'est mon père.", "his = son / sa pour un homme, her = son / sa pour une femme.", "Possessifs (my / his / her)"],
+      ["My sister ___ two children.", "has", ["has", "have", "is"], "Ma sœur a deux enfants.", "Avec he / she / it : has (pas have).", "Verbe have"]
     ]
   },
   {
@@ -138,10 +138,10 @@ window.COURSE = [
       ["I'll have the chicken.", "Je vais prendre le poulet.", ["I would like the chicken.", "I will take the chicken."]]
     ],
     blanks: [
-      ["I would ___ a tea, please.", "like", ["like", "liking", "likes"], "Je voudrais un thé, s'il vous plaît.", "I would like = je voudrais. Le verbe reste à sa forme de base."],
-      ["I ___ hungry.", "am", ["am", "have", "is"], "J'ai faim.", "J'ai faim = I am hungry (on utilise be, pas have)."],
-      ["Can I ___ the bill, please?", "have", ["have", "has", "am"], "Je peux avoir l'addition, s'il vous plaît ?", "Après can, le verbe reste à sa forme de base : have."],
-      ["___ are the toilets?", "Where", ["Where", "What", "Who"], "Où sont les toilettes ?", "where = où."]
+      ["I would ___ a tea, please.", "like", ["like", "liking", "likes"], "Je voudrais un thé, s'il vous plaît.", "I would like = je voudrais. Le verbe reste à sa forme de base.", "Forme de base du verbe"],
+      ["I ___ hungry.", "am", ["am", "have", "is"], "J'ai faim.", "J'ai faim = I am hungry (on utilise be, pas have).", "Be ou have (faim, froid…)"],
+      ["Can I ___ the bill, please?", "have", ["have", "has", "am"], "Je peux avoir l'addition, s'il vous plaît ?", "Après can, le verbe reste à sa forme de base : have.", "Forme de base du verbe"],
+      ["___ are the toilets?", "Where", ["Where", "What", "Who"], "Où sont les toilettes ?", "where = où.", "Mots interrogatifs"]
     ]
   },
   {
@@ -173,10 +173,10 @@ window.COURSE = [
       ["We eat at noon.", "Nous mangeons à midi.", ["We eat at twelve.", "We have lunch at noon."]]
     ],
     blanks: [
-      ["It is seven ___.", "o'clock", ["o'clock", "hours", "time"], "Il est sept heures.", "Il est 7 heures = It is seven o'clock."],
-      ["I work ___ Monday.", "on", ["on", "in", "at"], "Je travaille lundi.", "Devant un jour : on."],
-      ["I get up ___ seven.", "at", ["at", "on", "in"], "Je me lève à sept heures.", "Devant une heure : at."],
-      ["See you ___!", "tomorrow", ["tomorrow", "yesterday", "hour"], "À demain !", "tomorrow = demain, yesterday = hier."]
+      ["It is seven ___.", "o'clock", ["o'clock", "hours", "time"], "Il est sept heures.", "Il est 7 heures = It is seven o'clock.", "Dire l'heure"],
+      ["I work ___ Monday.", "on", ["on", "in", "at"], "Je travaille lundi.", "Devant un jour : on.", "Prépositions de temps"],
+      ["I get up ___ seven.", "at", ["at", "on", "in"], "Je me lève à sept heures.", "Devant une heure : at.", "Prépositions de temps"],
+      ["See you ___!", "tomorrow", ["tomorrow", "yesterday", "hour"], "À demain !", "tomorrow = demain, yesterday = hier.", "Vocabulaire du temps"]
     ]
   },
   {
@@ -208,10 +208,10 @@ window.COURSE = [
       ["It is cheap!", "Ce n'est pas cher !", ["That is cheap!", "It is not expensive!", "It isn't expensive!"]]
     ],
     blanks: [
-      ["How ___ is it?", "much", ["much", "many", "old"], "C'est combien ?", "Pour un prix : How much?"],
-      ["Can I pay ___ card?", "by", ["by", "in", "on"], "Je peux payer par carte ?", "Payer par carte = pay by card."],
-      ["I am ___ for milk.", "looking", ["looking", "look", "looks"], "Je cherche du lait.", "I am + verbe en -ing = action en cours."],
-      ["It is ___ expensive.", "too", ["too", "to", "two"], "C'est trop cher.", "too = trop. to = à / vers. two = deux. Même son, sens différent !"]
+      ["How ___ is it?", "much", ["much", "many", "old"], "C'est combien ?", "Pour un prix : How much?", "Quantité (much / many)"],
+      ["Can I pay ___ card?", "by", ["by", "in", "on"], "Je peux payer par carte ?", "Payer par carte = pay by card.", "Prépositions"],
+      ["I am ___ for milk.", "looking", ["looking", "look", "looks"], "Je cherche du lait.", "I am + verbe en -ing = action en cours.", "Présent continu (-ing)"],
+      ["It is ___ expensive.", "too", ["too", "to", "two"], "C'est trop cher.", "too = trop. to = à / vers. two = deux. Même son, sens différent !", "Homophones (too / to / two)"]
     ]
   },
   {
@@ -243,10 +243,10 @@ window.COURSE = [
       ["One ticket to London, please.", "Un billet pour Londres, s'il vous plaît.", ["A ticket to London, please."]]
     ],
     blanks: [
-      ["Here ___ my passport.", "is", ["is", "are", "am"], "Voici mon passeport.", "Here is = voici (pour une seule chose)."],
-      ["I ___ my suitcase.", "lost", ["lost", "lose", "loses"], "J'ai perdu ma valise.", "lost = perdu (passé de lose)."],
-      ["My flight is ___ ten.", "at", ["at", "in", "on"], "Mon vol est à dix heures.", "Devant une heure : at."],
-      ["A room ___ two nights, please.", "for", ["for", "to", "of"], "Une chambre pour deux nuits, s'il vous plaît.", "for = pour (une durée)."]
+      ["Here ___ my passport.", "is", ["is", "are", "am"], "Voici mon passeport.", "Here is = voici (pour une seule chose).", "Verbe be (am / is / are)"],
+      ["I ___ my suitcase.", "lost", ["lost", "lose", "loses"], "J'ai perdu ma valise.", "lost = perdu (passé de lose).", "Passé simple irrégulier"],
+      ["My flight is ___ ten.", "at", ["at", "in", "on"], "Mon vol est à dix heures.", "Devant une heure : at.", "Prépositions de temps"],
+      ["A room ___ two nights, please.", "for", ["for", "to", "of"], "Une chambre pour deux nuits, s'il vous plaît.", "for = pour (une durée).", "Prépositions"]
     ]
   },
   {
@@ -278,10 +278,10 @@ window.COURSE = [
       ["It is five minutes on foot.", "C'est à cinq minutes à pied.", ["It is a five minute walk."]]
     ],
     blanks: [
-      ["The bank is ___ the station.", "near", ["near", "far", "next"], "La banque est près de la gare.", "near = près de. (far et next ont besoin d'un autre mot : far from, next to.)"],
-      ["Where ___ the station?", "is", ["is", "are", "am"], "Où est la gare ?", "Une seule chose → is."],
-      ["Go straight ___.", "on", ["on", "in", "at"], "Allez tout droit.", "Tout droit = straight on."],
-      ["Can you help ___?", "me", ["me", "I", "my"], "Pouvez-vous m'aider ?", "Après un verbe : me (pas I)."]
+      ["The bank is ___ the station.", "near", ["near", "far", "next"], "La banque est près de la gare.", "near = près de. (far et next ont besoin d'un autre mot : far from, next to.)", "Prépositions de lieu"],
+      ["Where ___ the station?", "is", ["is", "are", "am"], "Où est la gare ?", "Une seule chose → is.", "Verbe be (am / is / are)"],
+      ["Go straight ___.", "on", ["on", "in", "at"], "Allez tout droit.", "Tout droit = straight on.", "Prépositions de lieu"],
+      ["Can you help ___?", "me", ["me", "I", "my"], "Pouvez-vous m'aider ?", "Après un verbe : me (pas I).", "Pronoms"]
     ]
   },
   {
@@ -313,10 +313,10 @@ window.COURSE = [
       ["What do you do at the weekend?", "Que fais-tu le week-end ?", ["What do you do on the weekend?", "What do you do on weekends?", "What do you do at weekends?"]]
     ],
     blanks: [
-      ["I don't ___ sport.", "like", ["like", "likes", "liking"], "Je n'aime pas le sport.", "Après don't, le verbe reste à sa forme de base."],
-      ["She ___ tennis.", "plays", ["plays", "play", "playing"], "Elle joue au tennis.", "Avec he / she / it, on ajoute -s au verbe."],
-      ["I love ___.", "reading", ["reading", "read", "reads"], "J'adore lire.", "Après love / like, on met souvent le verbe en -ing."],
-      ["What ___ you like?", "do", ["do", "does", "are"], "Qu'est-ce que tu aimes ?", "Pour poser une question avec you : do."]
+      ["I don't ___ sport.", "like", ["like", "likes", "liking"], "Je n'aime pas le sport.", "Après don't, le verbe reste à sa forme de base.", "Forme de base du verbe"],
+      ["She ___ tennis.", "plays", ["plays", "play", "playing"], "Elle joue au tennis.", "Avec he / she / it, on ajoute -s au verbe.", "Présent simple (-s à la 3e personne)"],
+      ["I love ___.", "reading", ["reading", "read", "reads"], "J'adore lire.", "Après love / like, on met souvent le verbe en -ing.", "Gérondif / infinitif"],
+      ["What ___ you like?", "do", ["do", "does", "are"], "Qu'est-ce que tu aimes ?", "Pour poser une question avec you : do.", "Questions avec do / does"]
     ]
   },
   {
@@ -348,10 +348,10 @@ window.COURSE = [
       ["Take an umbrella.", "Prends un parapluie.", []]
     ],
     blanks: [
-      ["It ___ raining.", "is", ["is", "are", "has"], "Il pleut.", "Pour la météo, on commence par It is…"],
-      ["I ___ cold.", "am", ["am", "have", "is"], "J'ai froid.", "J'ai froid = I am cold (be, pas have)."],
-      ["What is the weather ___?", "like", ["like", "as", "how"], "Quel temps fait-il ?", "Formule figée : What is the weather like?"],
-      ["Take ___ umbrella.", "an", ["an", "a", "two"], "Prends un parapluie.", "Devant un son voyelle (u-mbrella) : an."]
+      ["It ___ raining.", "is", ["is", "are", "has"], "Il pleut.", "Pour la météo, on commence par It is…", "Présent continu (-ing)"],
+      ["I ___ cold.", "am", ["am", "have", "is"], "J'ai froid.", "J'ai froid = I am cold (be, pas have).", "Be ou have (faim, froid…)"],
+      ["What is the weather ___?", "like", ["like", "as", "how"], "Quel temps fait-il ?", "Formule figée : What is the weather like?", "Expressions figées"],
+      ["Take ___ umbrella.", "an", ["an", "a", "two"], "Prends un parapluie.", "Devant un son voyelle (u-mbrella) : an.", "Articles (a / an)"]
     ]
   }
 ];

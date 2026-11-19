@@ -4,7 +4,6 @@
   /* ================================================================
      Constantes & contenu
      ================================================================ */
-  const COURSE = window.COURSE || [];
   const KEY = 'teatime-v1';
   const DAY_MS = 864e5;
   const SRS_DAYS = [0, 1, 3, 7, 14, 30, 60, 120];
@@ -25,28 +24,40 @@
     'weather': [], 'hungry': ['starving'], 'friend': [], 'favourite': ['favorite']
   };
 
+  const LEVEL_DEFS = [
+    { id: 'a1', name: 'A1', title: 'Débutant', data: window.COURSE_A1 || window.COURSE },
+    { id: 'a2', name: 'A2', title: 'Élémentaire', data: window.COURSE_A2 },
+    { id: 'b1', name: 'B1', title: 'Intermédiaire', data: window.COURSE_B1 }
+  ].filter(L => Array.isArray(L.data) && L.data.length);
+
   const ITEMS = {};
   const UNITS = [];
   const LESSONS = [];
+  const LEVELS = [];
 
-  COURSE.forEach((u, ui) => {
-    const unit = { id: u.id, index: ui, emoji: u.emoji, title: u.title, subtitle: u.subtitle, color: u.color, v: [], s: [], b: [] };
-    u.vocab.forEach(([en, fr, emoji], i) => {
-      const it = { id: `${u.id}.v${i}`, kind: 'v', unit: ui, en, fr, emoji, alts: VOCAB_ALTS[en] || [] };
-      ITEMS[it.id] = it; unit.v.push(it);
+  LEVEL_DEFS.forEach((L, lv) => {
+    const level = { id: L.id, name: L.name, title: L.title, index: lv, units: [] };
+    L.data.forEach((u, k) => {
+      const ui = UNITS.length;
+      const unit = { id: u.id, index: ui, level: lv, num: k, emoji: u.emoji, title: u.title, subtitle: u.subtitle, color: u.color, v: [], s: [], b: [] };
+      u.vocab.forEach(([en, fr, emoji], i) => {
+        const it = { id: `${u.id}.v${i}`, kind: 'v', unit: ui, en, fr, emoji, alts: VOCAB_ALTS[en] || [] };
+        ITEMS[it.id] = it; unit.v.push(it);
+      });
+      u.sentences.forEach(([en, fr, alts], i) => {
+        const it = { id: `${u.id}.s${i}`, kind: 's', unit: ui, en, fr, alts: alts || [] };
+        ITEMS[it.id] = it; unit.s.push(it);
+      });
+      u.blanks.forEach(([text, answer, options, fr, note, tag], i) => {
+        const it = { id: `${u.id}.b${i}`, kind: 'b', unit: ui, text, answer, options, fr, note, tag: tag || '', en: text.replace('___', answer), alts: [] };
+        ITEMS[it.id] = it; unit.b.push(it);
+      });
+      UNITS.push(unit); level.units.push(unit);
     });
-    u.sentences.forEach(([en, fr, alts], i) => {
-      const it = { id: `${u.id}.s${i}`, kind: 's', unit: ui, en, fr, alts: alts || [] };
-      ITEMS[it.id] = it; unit.s.push(it);
-    });
-    u.blanks.forEach(([text, answer, options, fr, note], i) => {
-      const it = { id: `${u.id}.b${i}`, kind: 'b', unit: ui, text, answer, options, fr, note, en: text.replace('___', answer), alts: [] };
-      ITEMS[it.id] = it; unit.b.push(it);
-    });
-    UNITS.push(unit);
+    LEVELS.push(level);
   });
   UNITS.forEach(u => LESSON_NAMES.forEach((name, li) => {
-    LESSONS.push({ key: `${u.id}.l${li}`, unit: u.index, li, name, idx: LESSONS.length });
+    LESSONS.push({ key: `${u.id}.l${li}`, unit: u.index, level: u.level, li, name, idx: LESSONS.length });
   }));
 
   /* ================================================================
@@ -171,7 +182,8 @@
       streak: { count: 0, best: 0, last: null, rest: [] },
       settings: { goal: 30, sound: true, vibe: true, anim: true, accent: 'en-US', slow: false, speak: true, theme: 'auto' },
       mute: { listen: 0, speak: 0 },
-      notice: null, installTip: false
+      notice: null, installTip: false,
+      level: 'a1', unlocked: {}, log: []
     };
   }
   function mergeState(d, o) {
@@ -182,6 +194,8 @@
       else d[k] = o[k];
     });
     if (!Array.isArray(d.streak.rest)) d.streak.rest = [];
+    if (!Array.isArray(d.log)) d.log = [];
+    if (!d.unlocked || typeof d.unlocked !== 'object') d.unlocked = {};
     return d;
   }
   function load() {
@@ -445,7 +459,7 @@
     return `<header class="topbar">
       <div class="brand"><span aria-hidden="true">☕</span>Tea<span>Time</span></div>
       <span class="chip flame ${active ? '' : 'off'}" title="Série de jours" aria-label="Série : ${plural(st.count, 'jour')}">🔥 ${st.count}</span>
-      <span class="chip" title="Niveau" aria-label="Niveau ${levelOf(S.xp)}">⭐ ${levelOf(S.xp)}</span>
+      <span class="chip" title="Rang" aria-label="Rang ${levelOf(S.xp)}">⭐ ${levelOf(S.xp)}</span>
       <div class="goal-ring" role="img" aria-label="Objectif du jour : ${x} sur ${g} XP" title="Objectif du jour : ${x}/${g} XP">
         <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="none" stroke="var(--line)" stroke-width="5"/>
         <circle cx="20" cy="20" r="16" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round" stroke-dasharray="${C.toFixed(2)}" stroke-dashoffset="${(C * (1 - pct)).toFixed(2)}"/></svg>
@@ -454,12 +468,30 @@
     </header>`;
   }
 
-  const nextLesson = () => LESSONS.find(l => !S.done[l.key]) || null;
-  const isUnlocked = l => l.idx === 0 || !!S.done[l.key] || !!S.done[LESSONS[l.idx - 1].key];
+  const curLevel = () => Math.max(0, LEVELS.findIndex(L => L.id === S.level));
+  const levelLessons = lv => LESSONS.filter(l => l.level === lv);
+  const levelComplete = lv => levelLessons(lv).every(l => S.done[l.key]);
+  const levelUnlocked = lv => lv === 0 || !!S.unlocked[LEVELS[lv].id] || levelComplete(lv - 1);
+  const nextLesson = lv => LESSONS.find(l => l.level === (lv == null ? curLevel() : lv) && !S.done[l.key]) || null;
+  function isUnlocked(l) {
+    if (S.done[l.key]) return true;
+    if (!levelUnlocked(l.level)) return false;
+    const prev = LESSONS[l.idx - 1];
+    return !prev || prev.level !== l.level || !!S.done[prev.key];
+  }
 
   /* ---------- Accueil ---------- */
+  function levelTabs(cur) {
+    return `<div class="levels" role="tablist" aria-label="Niveaux">${LEVELS.map(L => {
+      const ls = levelLessons(L.index), n = ls.filter(l => S.done[l.key]).length, on = L.index === cur;
+      return `<button class="lvl ${on ? 'on' : ''}" role="tab" aria-selected="${on}" data-act="level" data-lv="${L.index}">
+        <b>${levelUnlocked(L.index) ? '' : '🔒 '}${L.name}</b><span>${L.title}</span><i style="width:${Math.round(100 * n / ls.length)}%"></i></button>`;
+    }).join('')}</div>`;
+  }
+
   function renderHome() {
-    const nl = nextLesson();
+    const lv = curLevel(), L = LEVELS[lv], unl = levelUnlocked(lv);
+    const nl = unl ? nextLesson(lv) : null;
     const due = dueIds();
     const mist = due.filter(id => S.items[id].m).length;
     const learned = hasLearned();
@@ -474,17 +506,28 @@
       h += `<div class="notice"><span aria-hidden="true">📲</span><p><b>Installe l'app</b> : ${how}.</p><button class="icon-btn" data-act="dismiss-install" aria-label="Fermer">${IC.close}</button></div>`;
     }
 
-    if (nl) {
-      const u = UNITS[nl.unit];
-      const first = S.xp === 0;
+    h += levelTabs(lv);
+
+    if (!unl) {
+      const P = LEVELS[lv - 1], pl = levelLessons(lv - 1), pn = pl.filter(l => S.done[l.key]).length;
+      h += `<section class="card hero">
+        <div class="eyebrow">Niveau ${L.name} · ${esc(L.title)}</div>
+        <div class="row"><div class="big-emoji" aria-hidden="true">🔒</div><div><h2>Niveau verrouillé</h2><div class="sub">Termine le niveau ${P.name} (${pn}/${pl.length} leçons) ou prouve ton niveau avec le test d'entrée.</div></div></div>
+        <div class="sub">20 questions sur le niveau ${P.name}. Il faut 80 % de bonnes réponses.</div>
+        <button class="btn" data-act="test" data-lv="${lv}">Passer le test d'entrée</button>
+      </section>`;
+    } else if (nl) {
+      const u = UNITS[nl.unit], first = S.xp === 0;
       h += `<section class="card hero">
         <div class="eyebrow">${first ? 'Bienvenue 👋' : 'Continuer'}</div>
-        <div class="row"><div class="big-emoji" aria-hidden="true">${u.emoji}</div><div><h2>${esc(u.title)}</h2><div class="sub">Unité ${u.index + 1} · ${esc(nl.name)}</div></div></div>
-        ${first ? '<div class="sub">10 unités, 40 leçons de 5 minutes. Pas de vies, pas de pub : avance à ton rythme.</div>' : ''}
+        <div class="row"><div class="big-emoji" aria-hidden="true">${u.emoji}</div><div><h2>${esc(u.title)}</h2><div class="sub">Niveau ${L.name} · Unité ${u.num + 1} · ${esc(nl.name)}</div></div></div>
+        ${first ? '<div class="sub">3 niveaux, 120 leçons de 5 minutes. Pas de vies, pas de pub : avance à ton rythme.</div>' : ''}
         <button class="btn" data-act="start" data-l="${nl.idx}">${first ? 'Commencer' : 'Continuer'}</button>
       </section>`;
     } else {
-      h += `<section class="card hero"><div class="row"><div class="big-emoji" aria-hidden="true">🎓</div><div><h2>Parcours A1 terminé !</h2><div class="sub">Bravo. Révise pour tout garder en mémoire, ou refais tes leçons préférées.</div></div></div></section>`;
+      const N = LEVELS[lv + 1];
+      h += `<section class="card hero"><div class="row"><div class="big-emoji" aria-hidden="true">🎓</div><div><h2>Niveau ${L.name} terminé !</h2><div class="sub">${N ? `Bravo. Le niveau ${N.name} t'attend, avec plus de vocabulaire et des phrases plus longues.` : 'Bravo, tu as tout terminé. Révise pour garder tout en mémoire.'}</div></div></div>
+        ${N ? `<button class="btn" data-act="level" data-lv="${lv + 1}">Passer au niveau ${N.name}</button>` : ''}</section>`;
     }
 
     let sub;
@@ -498,36 +541,39 @@
       <button class="btn small ${due.length ? '' : 'ghost'}" data-act="review" ${learned ? '' : 'disabled'}>Réviser${due.length ? `<span class="badge-count">${due.length}</span>` : ''}</button>
     </section>`;
 
-    UNITS.forEach(u => {
+    L.units.forEach(u => {
       const ls = LESSONS.filter(l => l.unit === u.index);
       const nDone = ls.filter(l => S.done[l.key]).length;
       const locked = !isUnlocked(ls[0]);
-      h += `<section class="unit ${locked ? 'locked' : ''}" aria-label="Unité ${u.index + 1} : ${esc(u.title)}">
+      h += `<section class="unit ${locked ? 'locked' : ''}" aria-label="Unité ${u.num + 1} : ${esc(u.title)}">
         <div class="unit-head" style="background:${u.color}">
           <div class="em" aria-hidden="true">${u.emoji}</div>
-          <div class="t"><small>Unité ${u.index + 1}</small><b>${esc(u.title)}</b><span>${esc(u.subtitle)}</span></div>
+          <div class="t"><small>${L.name} · Unité ${u.num + 1}</small><b>${esc(u.title)}</b><span>${esc(u.subtitle)}</span></div>
           <div class="prog">${locked ? '🔒' : `${nDone}/4`}</div>
         </div><div class="nodes">`;
       ls.forEach((l, i) => {
-        const done = !!S.done[l.key], unl = isUnlocked(l), cur = nl && nl.idx === l.idx;
-        h += `<button class="node ${done ? 'done' : ''} ${unl ? '' : 'locked'} ${cur ? 'current' : ''}" style="--c:${u.color};left:${NODE_OFFSETS[i]}px" data-act="node" data-l="${l.idx}" aria-label="${esc(l.name)}${done ? ', terminée' : unl ? '' : ', verrouillée'}">${unl ? LESSON_ICONS[i] : '🔒'}${cur ? `<span class="start-tip">${S.xp === 0 ? 'Commencer' : 'Ici'}</span>` : ''}</button>`;
+        const done = !!S.done[l.key], unlk = isUnlocked(l), cur = nl && nl.idx === l.idx;
+        h += `<button class="node ${done ? 'done' : ''} ${unlk ? '' : 'locked'} ${cur ? 'current' : ''}" style="--c:${u.color};left:${NODE_OFFSETS[i]}px" data-act="node" data-l="${l.idx}" aria-label="${esc(l.name)}${done ? ', terminée' : unlk ? '' : ', verrouillée'}">${unlk ? LESSON_ICONS[i] : '🔒'}${cur ? `<span class="start-tip">${S.xp === 0 ? 'Commencer' : 'Ici'}</span>` : ''}</button>`;
       });
       h += `</div>${nDone === 4 ? '<div class="trophy">🏆 Unité terminée</div>' : ''}</section>`;
     });
-    h += `<div class="path-end">🎓 Fin du niveau A1</div></main>` + tabbar('home');
+    h += `<div class="path-end">🎓 Fin du niveau ${L.name}</div></main>` + tabbar('home');
     app.innerHTML = h;
   }
 
   function openSheet(l) {
     if (!l) return;
-    if (!isUnlocked(l)) { toast("Termine d'abord la leçon précédente 🔒"); return; }
+    if (!isUnlocked(l)) {
+      toast(levelUnlocked(l.level) ? "Termine d'abord la leçon précédente 🔒" : `Niveau ${LEVELS[l.level].name} verrouillé : passe le test d'entrée 🔒`);
+      return;
+    }
     const u = UNITS[l.unit], d = S.done[l.key];
     const preview = l.li < 2
       ? 'Nouveaux mots : ' + u.v.slice(l.li * 6, l.li * 6 + 6).map(v => `<b>${esc(v.en)}</b>`).join(' · ')
       : 'Au programme :<br>' + u.s.slice((l.li - 2) * 5, (l.li - 2) * 5 + 3).map(s => `« <b>${esc(s.en)}</b> »`).join('<br>') + '<br>…';
     overlay(`<div class="scrim" data-act="close-ov"><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(l.name)}">
       <h3>${u.emoji} ${esc(l.name)}</h3>
-      <div class="meta">Unité ${u.index + 1} · ${esc(u.title)}${d ? ` · faite ${d.n}× · meilleur score ${d.best} %` : ' · environ 5 min'}</div>
+      <div class="meta">Niveau ${LEVELS[u.level].name} · Unité ${u.num + 1} · ${esc(u.title)}${d ? ` · faite ${d.n}× · meilleur score ${d.best} %` : ' · environ 5 min'}</div>
       <div class="preview">${preview}</div>
       <div class="actions"><button class="btn" data-act="start" data-l="${l.idx}">${d ? 'Refaire la leçon' : 'Commencer'}</button><button class="btn ghost" data-act="close-ov">Fermer</button></div>
     </div></div>`);
@@ -539,7 +585,7 @@
   const wc = s => s.split(/\s+/).length;
 
   function genLesson(ui, li) {
-    const u = UNITS[ui], seq = [];
+    const u = UNITS[ui], D = Math.min(u.level, 2), seq = [];
     if (li < 2) {
       const w = u.v.slice(li * 6, li * 6 + 6);
       for (let i = 0; i < w.length; i += 2) {
@@ -547,26 +593,65 @@
           { t: 'pick', item: w[i], dir: 'en2fr' }, { t: 'pick', item: w[i + 1], dir: 'fr2en' });
       }
       const r = shuffle(w);
-      seq.push({ t: 'match', items: r.slice(0, 5) });
-      seq.push(...shuffle([
-        { t: 'listen_pick', item: r[0] }, { t: 'pick', item: r[1], dir: 'fr2en' }, { t: 'listen_pick', item: r[2] },
-        { t: 'type', item: r[3] }, { t: 'pick', item: r[4], dir: 'en2fr' }, { t: 'listen_pick', item: r[5] }
-      ]));
+      const T = it => ({ t: 'type', item: it }), LP = it => ({ t: 'listen_pick', item: it }), LT = it => ({ t: 'listen_type', item: it });
+      const PF = it => ({ t: 'pick', item: it, dir: 'fr2en' }), PE = it => ({ t: 'pick', item: it, dir: 'en2fr' });
+      const tails = [
+        [LP(r[0]), PF(r[1]), LP(r[2]), T(r[3]), PE(r[4]), LP(r[5])],
+        [LP(r[0]), T(r[1]), LP(r[2]), T(r[3]), PF(r[4]), T(r[5])],
+        [T(r[0]), LT(r[1]), T(r[2]), T(r[3]), LP(r[4]), T(r[5])]
+      ];
+      seq.push({ t: 'match', items: r.slice(0, 5) }, ...shuffle(tails[D]));
     } else {
       const s = u.s.slice((li - 2) * 5, (li - 2) * 5 + 5);
-      const b = u.b.slice((li - 2) * 2, (li - 2) * 2 + 2);
+      const half = Math.ceil(u.b.length / 2);
+      const b = u.b.slice((li - 2) * half, (li - 2) * half + half);
       const P = it => ({ t: 'pick', item: it, dir: 'en2fr' });
-      const B = it => ({ t: 'build', item: it });
-      const BL = it => ({ t: 'blank', item: it });
-      seq.push(P(s[0]), P(s[1]), B(s[0]), P(s[2]), B(s[1]), BL(b[0]), P(s[3]), B(s[2]), P(s[4]), B(s[3]), BL(b[1]), B(s[4]));
+      // Plus le niveau monte, plus on écrit soi-même au lieu d'assembler des étiquettes
+      const prod = (it, k) => ({ t: D === 0 || (D === 1 && k % 2 === 0) || (D === 2 && k % 3 === 1) ? 'build' : 'type', item: it });
+      const BL = it => (it ? [{ t: 'blank', item: it }] : []);
+      seq.push(P(s[0]), P(s[1]), prod(s[0], 0), P(s[2]), prod(s[1], 1), ...BL(b[0]), P(s[3]), prod(s[2], 2),
+        P(s[4]), prod(s[3], 3), ...BL(b[1]), prod(s[4], 4), ...BL(b[2]));
       const short = s.slice().sort((a, c) => wc(a.en) - wc(c.en));
+      const sp = { t: 'speak', item: pick1(short.slice(0, 3)) };
       if (li === 2) {
-        seq.push({ t: 'listen_build', item: pick1(s) }, { t: 'speak', item: pick1(short.slice(0, 3)) });
+        seq.push(...[
+          [{ t: 'listen_build', item: pick1(s) }, sp],
+          [{ t: 'listen_build', item: short[3] }, { t: 'listen_type', item: short[0] }, sp],
+          [{ t: 'listen_type', item: short[0] }, { t: 'listen_type', item: short[1] }, sp]
+        ][D]);
       } else {
-        seq.push({ t: 'type', item: short[0] }, { t: 'listen_type', item: short[1] },
-          { t: 'speak', item: pick1(short.slice(0, 3)) }, { t: 'match', items: sample(u.v, 5) });
+        seq.push({ t: 'type', item: short[0] }, { t: 'listen_type', item: short[1] }, sp);
+        if (D === 2) seq.push({ t: 'listen_type', item: short[2] });
+        seq.push({ t: 'match', items: sample(u.v, 5) });
       }
     }
+    return seq;
+  }
+
+  function exForItem(it, strong) {
+    const hard = strong || UNITS[it.unit].level >= 2;
+    if (it.kind === 'v') return hard
+      ? pick1([{ t: 'type', item: it }, { t: 'listen_pick', item: it }])
+      : pick1([{ t: 'pick', item: it, dir: 'fr2en' }, { t: 'pick', item: it, dir: 'en2fr' }, { t: 'listen_pick', item: it }]);
+    if (it.kind === 's') return hard
+      ? pick1([{ t: 'type', item: it }, { t: 'listen_type', item: it }, { t: 'listen_build', item: it }])
+      : pick1([{ t: 'build', item: it }, { t: 'listen_build', item: it }]);
+    return { t: 'blank', item: it };
+  }
+
+  function distinctVocab(list) {
+    const en = new Set(), fr = new Set();
+    return list.filter(it => {
+      const a = low(it.en), b = low(it.fr);
+      if (en.has(a) || fr.has(b)) return false;
+      en.add(a); fr.add(b); return true;
+    });
+  }
+
+  function sessionFrom(ids) {
+    const seq = shuffle(ids).map(id => exForItem(ITEMS[id], S.items[id] && S.items[id].b >= 2 && !S.items[id].m));
+    const vocab = distinctVocab(ids.map(id => ITEMS[id]).filter(it => it.kind === 'v'));
+    if (vocab.length >= 4) seq.splice(Math.floor(seq.length / 2), 0, { t: 'match', items: sample(vocab, 5) });
     return seq;
   }
 
@@ -579,19 +664,27 @@
         .slice(0, 8 - ids.length);
       ids = ids.concat(extra);
     }
-    const seq = shuffle(ids).map(id => {
-      const it = ITEMS[id], r = S.items[id], strong = r.b >= 2 && !r.m;
-      if (it.kind === 'v') return strong
-        ? pick1([{ t: 'type', item: it }, { t: 'listen_pick', item: it }])
-        : pick1([{ t: 'pick', item: it, dir: 'fr2en' }, { t: 'pick', item: it, dir: 'en2fr' }, { t: 'listen_pick', item: it }]);
-      if (it.kind === 's') return strong
-        ? pick1([{ t: 'type', item: it }, { t: 'listen_type', item: it }, { t: 'listen_build', item: it }])
-        : pick1([{ t: 'build', item: it }, { t: 'listen_build', item: it }]);
-      return { t: 'blank', item: it };
-    });
-    const vocab = ids.map(id => ITEMS[id]).filter(it => it.kind === 'v');
-    if (vocab.length >= 4) seq.splice(Math.floor(seq.length / 2), 0, { t: 'match', items: sample(vocab, 5) });
-    return seq;
+    return sessionFrom(ids);
+  }
+
+  // Points faibles : ce qui a été raté le plus souvent (et pas encore corrigé)
+  function weakIds(n) {
+    return Object.keys(S.items)
+      .filter(id => ITEMS[id] && S.items[id].w > 0)
+      .sort((a, b) => (S.items[b].m - S.items[a].m) || ((S.items[b].w - S.items[b].c * 0.25) - (S.items[a].w - S.items[a].c * 0.25)))
+      .slice(0, n || 12);
+  }
+  function genWeak() { return sessionFrom(weakIds(12)); }
+
+  // Test d'entrée d'un niveau : 20 questions sur le niveau précédent
+  function genTest(lv) {
+    const units = LEVELS[lv - 1].units;
+    const V = units.flatMap(u => u.v), Ss = units.flatMap(u => u.s), Bs = units.flatMap(u => u.b);
+    return shuffle([
+      ...sample(V, 6).map(it => pick1([{ t: 'type', item: it }, { t: 'listen_pick', item: it }, { t: 'pick', item: it, dir: 'fr2en' }])),
+      ...sample(Ss, 8).map(it => pick1([{ t: 'build', item: it }, { t: 'type', item: it }, { t: 'listen_build', item: it }])),
+      ...sample(Bs, 6).map(it => ({ t: 'blank', item: it }))
+    ]);
   }
 
   function adapt(ex) {
@@ -642,6 +735,15 @@
     const seq = genReview();
     if (!seq.length) { toast("Fais d'abord une leçon 🙂"); return; }
     startRun({ kind: 'review', seq });
+  }
+  function startWeak() {
+    const seq = genWeak();
+    if (!seq.length) { toast('Aucune erreur enregistrée pour l\'instant 👏'); return; }
+    startRun({ kind: 'review', seq });
+  }
+  function startTest(lv) {
+    if (!LEVELS[lv] || lv < 1) return;
+    startRun({ kind: 'test', level: lv, seq: genTest(lv) });
   }
   function startRun(o) {
     closeOverlays();
@@ -745,9 +847,9 @@
       Sfx.ok(); vibe(15);
     } else {
       R.wrong++; R.combo = 0;
-      if (ex.item && !res.noSrs) srsWrong(ex.item.id);
+      if (ex.item && !res.noSrs) { srsWrong(ex.item.id); logMistake(ex, res.given); }
       ex.tries = (ex.tries || 0) + 1;
-      res.requeued = ex.tries < 2;
+      res.requeued = ex.tries < 2 && R.kind !== 'test';
       if (res.requeued) R.queue.push(ex); else R.done++;
       Sfx.bad(); vibe([40, 60, 40]);
     }
@@ -757,6 +859,12 @@
     const fb = feedbackFor(res);
     setFoot('feedback', fb);
     if (fb.speak) sayLater(fb.speak, 380);
+  }
+
+  function logMistake(ex, given) {
+    if (!Array.isArray(S.log)) S.log = [];
+    S.log.push({ id: ex.item.id, t: ex.t, a: String(given == null ? '' : given).slice(0, 80), d: Date.now() });
+    if (S.log.length > 400) S.log.splice(0, S.log.length - 400);
   }
 
   function feedbackFor(res) {
@@ -802,40 +910,69 @@
     const sec = Math.max(1, Math.round((Date.now() - r.start) / 1000));
     const acc = r.tot ? Math.round(100 * r.ok / r.tot) : 100;
     const perfect = r.wrong === 0;
-    const xp = r.kind === 'lesson' ? 10 + (perfect ? 5 : 0) + Math.min(5, Math.floor(r.maxCombo / 5)) : 8 + (perfect ? 4 : 0);
+    const xp = r.kind === 'lesson' ? 10 + (perfect ? 5 : 0) + Math.min(5, Math.floor(r.maxCombo / 5))
+      : r.kind === 'test' ? 10 + (perfect ? 5 : 0) : 8 + (perfect ? 4 : 0);
     const d = dayRec(today()), goal = S.settings.goal;
     const goalBefore = d.xp >= goal, lvlBefore = levelOf(S.xp);
     d.xp += xp; d.lessons++; d.sec += sec; d.ok += r.ok; d.tot += r.tot;
     S.xp += xp;
-    let unitDone = false;
+    let unitDone = false, levelDone = false, passed = null;
     if (r.kind === 'lesson') {
       const k = r.lesson.key, p = S.done[k];
       S.done[k] = { n: (p ? p.n : 0) + 1, best: Math.max(p ? p.best : 0, acc) };
       unitDone = !p && LESSONS.filter(l => l.unit === r.lesson.unit).every(l => S.done[l.key]);
+      levelDone = !p && levelComplete(r.lesson.level);
+    }
+    if (r.kind === 'test') {
+      passed = acc >= 80;
+      if (passed) { S.unlocked[LEVELS[r.level].id] = true; S.level = LEVELS[r.level].id; }
     }
     const extended = markActive();
     save();
     R = null;
     screen = 'result';
-    renderResult({ kind: r.kind, lesson: r.lesson, xp, acc, sec, perfect, extended, goalBefore, goalAfter: d.xp >= goal, lvlBefore, lvlAfter: levelOf(S.xp), unitDone });
+    renderResult({ kind: r.kind, lesson: r.lesson, testLevel: r.level, xp, acc, sec, perfect, extended, goalBefore, goalAfter: d.xp >= goal, lvlBefore, lvlAfter: levelOf(S.xp), unitDone, levelDone, passed });
+    if (passed === false) { Sfx.bad(); return; }
     Sfx.done(); vibe([30, 50, 30]);
     confetti();
   }
 
   function renderResult(o) {
-    const nl = nextLesson(), goal = S.settings.goal, tx = todayXp();
+    const goal = S.settings.goal, tx = todayXp();
     const msgs = [];
+    if (o.kind === 'test') {
+      const T = LEVELS[o.testLevel];
+      msgs.push(o.passed ? `🔓 Niveau <b>${T.name}</b> débloqué !` : `Il faut 80 % pour débloquer le niveau ${T.name}. Tes erreurs t'attendent dans « Réviser mes erreurs ».`);
+    }
     if (o.extended) msgs.push(`🔥 Série : <b>${plural(S.streak.count, 'jour')}</b>${S.streak.count > 1 ? ', continue comme ça !' : '. Reviens demain pour la prolonger.'}`);
     if (!o.goalBefore && o.goalAfter) msgs.push('🎯 Objectif du jour atteint !');
-    if (o.lvlAfter > o.lvlBefore) msgs.push(`⭐ Niveau ${o.lvlAfter} atteint !`);
+    if (o.lvlAfter > o.lvlBefore) msgs.push(`⭐ Rang ${o.lvlAfter} atteint !`);
     if (o.unitDone) msgs.push(`🏆 Unité « ${esc(UNITS[o.lesson.unit].title)} » terminée !`);
-    const em = o.perfect ? '🏆' : o.acc >= 80 ? '🎉' : '💪';
-    const title = o.kind === 'review' ? 'Révision terminée !' : o.perfect ? 'Sans faute !' : 'Leçon terminée !';
-    const sub = o.perfect ? 'Aucune erreur, impressionnant.' : o.acc >= 80 ? 'Très bon travail.' : "Chaque erreur t'aide à progresser.";
+    if (o.levelDone) msgs.push(`🎓 Niveau ${LEVELS[o.lesson.level].name} terminé !`);
+    let em, title, sub;
+    if (o.kind === 'test') {
+      em = o.passed ? '🔓' : '💪';
+      title = o.passed ? 'Test réussi !' : 'Pas encore…';
+      sub = `Score : ${o.acc} % de bonnes réponses.`;
+    } else {
+      em = o.perfect ? '🏆' : o.acc >= 80 ? '🎉' : '💪';
+      title = o.kind === 'review' ? 'Révision terminée !' : o.perfect ? 'Sans faute !' : 'Leçon terminée !';
+      sub = o.perfect ? 'Aucune erreur, impressionnant.' : o.acc >= 80 ? 'Très bon travail.' : "Chaque erreur t'aide à progresser.";
+    }
+    const home = `<button class="btn ghost" data-act="home">Retour à l'accueil</button>`;
     let actions;
-    if (o.kind === 'lesson' && nl) actions = `<button class="btn" data-act="start" data-l="${nl.idx}">Leçon suivante</button><button class="btn ghost" data-act="home">Retour à l'accueil</button>`;
-    else if (o.kind === 'review' && dueIds().length) actions = `<button class="btn" data-act="home">Retour à l'accueil</button><button class="btn ghost" data-act="review">Encore une révision</button>`;
-    else actions = `<button class="btn" data-act="home">Retour à l'accueil</button>`;
+    if (o.kind === 'lesson') {
+      const lv = o.lesson.level, nl = nextLesson(lv), N = LEVELS[lv + 1];
+      if (nl) actions = `<button class="btn" data-act="start" data-l="${nl.idx}">Leçon suivante</button>` + home;
+      else if (N) actions = `<button class="btn" data-act="level-start" data-lv="${lv + 1}">Commencer le niveau ${N.name}</button>` + home;
+      else actions = `<button class="btn" data-act="home">Retour à l'accueil</button>`;
+    } else if (o.kind === 'test') {
+      actions = o.passed
+        ? `<button class="btn" data-act="level-start" data-lv="${o.testLevel}">Commencer le niveau ${LEVELS[o.testLevel].name}</button>` + home
+        : `<button class="btn" data-act="home">Retour à l'accueil</button><button class="btn ghost" data-act="test" data-lv="${o.testLevel}">Réessayer le test</button>`;
+    } else if (dueIds().length) {
+      actions = `<button class="btn" data-act="home">Retour à l'accueil</button><button class="btn ghost" data-act="review">Encore une révision</button>`;
+    } else actions = `<button class="btn" data-act="home">Retour à l'accueil</button>`;
     app.innerHTML = `<div class="result">
       <div class="em" aria-hidden="true">${em}</div>
       <h1>${title}</h1><p class="sub">${sub}</p>
@@ -888,7 +1025,7 @@
 
   function buildEx(ex, body, listen) {
     const it = ex.item, words = tokens(it.en);
-    const tiles = shuffle(words.concat(distractors(it, words, words.length >= 6 ? 4 : 3)).map((w, i) => ({ w, i })));
+    const tiles = shuffle(words.concat(distractors(it, words, 3 + Math.min(UNITS[it.unit].level, 2) + (words.length >= 6 ? 1 : 0))).map((w, i) => ({ w, i })));
     const byI = i => tiles.find(t => t.i === i);
     const ans = [];
     body.innerHTML = `<div class="ex-title">${listen ? 'Écris ce que tu entends' : 'Traduis cette phrase'}</div>
@@ -926,8 +1063,9 @@
         if (e.key === 'Backspace' && ans.length) { const i = ans.pop(); bankBtn(i).classList.remove('used'); draw(); }
       },
       check: () => {
-        const r = checkText(ans.map(i => byI(i).w).join(' '), it, false);
-        return { ok: r.ok, alt: r.alt, correct: it.en, meaning: listen ? it.fr : null, sayAfter: listen ? null : it.en };
+        const given = ans.map(i => byI(i).w).join(' ');
+        const r = checkText(given, it, false);
+        return { ok: r.ok, given, alt: r.alt, correct: it.en, meaning: listen ? it.fr : null, sayAfter: listen ? null : it.en };
       },
       reveal: () => body.querySelectorAll('.tile').forEach(b => { b.disabled = true; })
     };
@@ -951,7 +1089,7 @@
       ready: () => ta.value.trim().length > 0,
       check: () => {
         const r = checkText(ta.value, it, true);
-        return { ok: r.ok, typo: r.typo, alt: r.alt, correct: it.en, meaning: listen ? it.fr : null, sayAfter: listen ? null : it.en };
+        return { ok: r.ok, given: ta.value, typo: r.typo, alt: r.alt, correct: it.en, meaning: listen ? it.fr : null, sayAfter: listen ? null : it.en };
       },
       reveal: () => { ta.readOnly = true; ta.blur(); }
     };
@@ -980,7 +1118,7 @@
       return {
         ready: () => c.sel >= 0,
         onKey: c.onKey,
-        check: () => ({ ok: opts[c.sel] === it, correct: it[field], sayAfter: en2fr ? null : it.en }),
+        check: () => ({ ok: opts[c.sel] === it, given: opts[c.sel][field], correct: it[field], sayAfter: en2fr ? null : it.en }),
         reveal: res => c.reveal(j => opts[j] === it, res)
       };
     },
@@ -994,7 +1132,7 @@
       return {
         ready: () => c.sel >= 0,
         onKey: c.onKey,
-        check: () => ({ ok: opts[c.sel] === it, correct: it.en, meaning: it.fr }),
+        check: () => ({ ok: opts[c.sel] === it, given: opts[c.sel].en, correct: it.en, meaning: it.fr }),
         reveal: res => c.reveal(j => opts[j] === it, res)
       };
     },
@@ -1046,7 +1184,7 @@
       return {
         ready: () => c.sel >= 0,
         onKey: c.onKey,
-        check: () => ({ ok: opts[c.sel] === it.answer, correct: it.en, note: it.note, sayAfter: it.en }),
+        check: () => ({ ok: opts[c.sel] === it.answer, given: opts[c.sel], correct: it.en, note: it.note, sayAfter: it.en }),
         reveal: res => { c.reveal(j => opts[j] === it.answer, res); if (!res.ok) gap.textContent = it.answer; }
       };
     },
@@ -1145,9 +1283,22 @@
     return s + '</svg>';
   }
 
+  function weakData() {
+    const tags = {};
+    Object.keys(S.items).forEach(id => {
+      const it = ITEMS[id], r = S.items[id];
+      if (!it || it.kind !== 'b' || !it.tag || !r.w) return;
+      const t = tags[it.tag] || (tags[it.tag] = { w: 0, c: 0 });
+      t.w += r.w; t.c += r.c || 0;
+    });
+    const tagList = Object.entries(tags).sort((a, b) => b[1].w - a[1].w).slice(0, 5);
+    const items = weakIds(8).filter(id => ITEMS[id].kind !== 'b');
+    return { tagList, items };
+  }
+
   function renderStats() {
     refreshStreak();
-    const st = S.streak;
+    const st = S.streak, lv = curLevel();
     const allV = UNITS.flatMap(u => u.v), allS = UNITS.flatMap(u => u.s);
     const words = allV.filter(v => S.items[v.id] && S.items[v.id].c > 0).length;
     const sents = allS.filter(v => S.items[v.id] && S.items[v.id].c > 0).length;
@@ -1156,25 +1307,41 @@
     const lvl = levelOf(S.xp), f0 = levelFloor(lvl), f1 = levelFloor(lvl + 1);
     const lp = Math.round(100 * (S.xp - f0) / (f1 - f0));
     const doneCount = LESSONS.filter(l => S.done[l.key]).length;
+    const wk = weakData();
+    const weakHtml = (!wk.tagList.length && !wk.items.length)
+      ? '<p class="cap" style="margin:6px 0 0">Aucune erreur enregistrée pour l\'instant 👏</p>'
+      : `${wk.tagList.length ? `<h4>Grammaire</h4>${wk.tagList.map(([t, v]) => `<div class="wk-row"><span class="n">${esc(t)}</span><span class="x">✕ ${v.w}</span></div>`).join('')}` : ''}
+         ${wk.items.length ? `<h4>Mots et phrases</h4>${wk.items.map(id => { const it = ITEMS[id], r = S.items[id]; return `<div class="wk-row"><span class="n"><b>${esc(it.en)}</b><small>${esc(it.fr)}${r.m ? ' · à revoir' : ' · corrigé'}</small></span><span class="x">✕ ${r.w}</span></div>`; }).join('')}` : ''}
+         <button class="btn" data-act="weak" style="margin-top:14px">Travailler mes points faibles</button>`;
     app.innerHTML = topbar() + `<main class="scroll">
       <h1 class="page-title">Mes progrès</h1>
       <div class="tiles">
         <div class="tile-stat"><div class="lbl">Série</div><div class="val"><span class="ic">🔥</span> ${plural(st.count, 'jour')}</div><div class="hint">Record : ${st.best} · ${restAvailable() ? 'repos dispo cette semaine' : 'repos utilisé cette semaine'}</div></div>
-        <div class="tile-stat"><div class="lbl">Niveau ${lvl}</div><div class="val"><span class="ic">⭐</span> ${S.xp} XP</div><div class="lvlbar"><i style="width:${lp}%"></i></div><div class="hint">Encore ${f1 - S.xp} XP pour le niveau ${lvl + 1}</div></div>
+        <div class="tile-stat"><div class="lbl">Rang ${lvl}</div><div class="val"><span class="ic">⭐</span> ${S.xp} XP</div><div class="lvlbar"><i style="width:${lp}%"></i></div><div class="hint">Encore ${f1 - S.xp} XP pour le rang ${lvl + 1}</div></div>
         <div class="tile-stat"><div class="lbl">Mots appris</div><div class="val"><span class="ic">📚</span> ${words}</div><div class="hint">sur ${allV.length}</div></div>
         <div class="tile-stat"><div class="lbl">Phrases apprises</div><div class="val"><span class="ic">💬</span> ${sents}</div><div class="hint">sur ${allS.length}</div></div>
         <div class="tile-stat"><div class="lbl">Précision</div><div class="val"><span class="ic">🎯</span> ${tot ? Math.round(100 * ok / tot) + ' %' : '—'}</div><div class="hint">${plural(tot, 'réponse')}</div></div>
         <div class="tile-stat"><div class="lbl">Temps total</div><div class="val"><span class="ic">⏱️</span> ${fmtDuration(sec)}</div><div class="hint">${plural(lessons, 'séance')}</div></div>
       </div>
+      <section class="card wk" style="margin-bottom:14px">
+        <h3 style="margin:0 0 2px;font-size:17px">Mes points faibles</h3>
+        <p class="cap" style="color:var(--ink-2);font-size:14px;margin:0">Calculés à partir de tes erreurs</p>
+        ${weakHtml}
+      </section>
       <section class="card chart-card">
         <h3>XP des 7 derniers jours</h3>
         <p class="cap">Ligne pointillée : ton objectif (${S.settings.goal} XP par jour)</p>
         <div class="chart">${weekChart()}</div>
       </section>
       <section class="card" style="margin-top:14px">
-        <h3 style="margin:0 0 4px;font-size:17px">Parcours A1</h3>
+        <h3 style="margin:0 0 4px;font-size:17px">Parcours</h3>
         <p class="cap" style="color:var(--ink-2);font-size:14px;margin:0">${doneCount} / ${LESSONS.length} leçons terminées</p>
-        <div class="units-prog">${UNITS.map(u => {
+        <div class="units-prog">${LEVELS.map(L => {
+          const ls = levelLessons(L.index), n = ls.filter(l => S.done[l.key]).length;
+          return `<div class="up-row"><b style="width:30px">${L.name}</b><span class="n">${esc(L.title)}${levelUnlocked(L.index) ? '' : ' 🔒'}</span><span class="bar"><i style="width:${Math.round(100 * n / ls.length)}%;background:var(--primary)"></i></span><b style="width:44px;text-align:right">${n}/${ls.length}</b></div>`;
+        }).join('')}</div>
+        <h4 style="margin:16px 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Niveau ${LEVELS[lv].name}</h4>
+        <div class="units-prog" style="margin-top:6px">${LEVELS[lv].units.map(u => {
           const n = LESSONS.filter(l => l.unit === u.index && S.done[l.key]).length;
           return `<div class="up-row"><span aria-hidden="true">${u.emoji}</span><span class="n">${esc(u.title)}</span><span class="bar"><i style="width:${n * 25}%;background:${u.color}"></i></span><b style="width:30px;text-align:right">${n}/4</b></div>`;
         }).join('')}</div>
@@ -1300,6 +1467,19 @@
       case 'start': startLesson(+a.dataset.l); break;
       case 'node': openSheet(LESSONS[+a.dataset.l]); break;
       case 'review': startReview(); break;
+      case 'weak': startWeak(); break;
+      case 'test': startTest(+a.dataset.lv); break;
+      case 'level': {
+        const L = LEVELS[+a.dataset.lv]; if (!L) break;
+        S.level = L.id; save(); show('home'); break;
+      }
+      case 'level-start': {
+        const lv = +a.dataset.lv, L = LEVELS[lv]; if (!L) break;
+        S.level = L.id; save();
+        const nl = nextLesson(lv);
+        if (nl && isUnlocked(nl)) startLesson(nl.idx); else goHome();
+        break;
+      }
       case 'home': goHome(); break;
       case 'dismiss-notice': S.notice = null; save(); renderHome(); break;
       case 'dismiss-install': S.installTip = true; save(); renderHome(); break;
@@ -1384,5 +1564,5 @@
   if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => { /* rien */ });
 
   // Accès pour les tests automatisés
-  window.__tt = { get S() { return S; }, get R() { return R; }, ITEMS, UNITS, LESSONS, norm, checkText, genLesson, genReview, speechScore };
+  window.__tt = { get S() { return S; }, get R() { return R; }, ITEMS, UNITS, LESSONS, LEVELS, norm, checkText, genLesson, genReview, genTest, genWeak, speechScore };
 })();

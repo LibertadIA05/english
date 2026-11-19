@@ -1,10 +1,12 @@
 // Service worker : l'app fonctionne hors ligne.
-const VERSION = 'teatime-v1';
+const VERSION = 'teatime-v2';
 const FILES = [
   './',
   './index.html',
   './styles.css',
   './data.js',
+  './data-a2.js',
+  './data-b1.js',
   './app.js',
   './manifest.webmanifest',
   './icons/icon.svg',

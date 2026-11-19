@@ -509,6 +509,27 @@ main.scroll { flex: 1; padding: 16px 16px calc(96px + env(safe-area-inset-bottom
 .danger { color: var(--bad) !important; }
 .foot-note { text-align: center; color: var(--muted); font-size: 13px; margin: 18px 0 4px; }
 
+/* ---------- Niveaux (A1 / A2 / B1) ---------- */
+.levels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.lvl {
+  appearance: none; position: relative; overflow: hidden; text-align: left;
+  background: var(--surface); border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px;
+  padding: 8px 10px 12px; display: flex; flex-direction: column; gap: 1px; min-width: 0;
+}
+.lvl b { font-size: 18px; font-weight: 900; line-height: 1.2; }
+.lvl span { font-size: 12px; color: var(--ink-2); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lvl i { position: absolute; left: 0; bottom: 0; height: 4px; background: var(--gold); border-radius: 0 4px 4px 0; }
+.lvl.on { border-color: var(--primary); background: var(--primary-tint); }
+.lvl.on b { color: var(--primary); }
+
+/* ---------- Points faibles ---------- */
+.wk h4 { margin: 14px 0 2px; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.wk-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 15px; }
+.wk h4 + .wk-row { border-top: 0; }
+.wk-row .n { flex: 1; min-width: 0; }
+.wk-row .n small { display: block; color: var(--ink-2); font-size: 13px; }
+.wk-row .x { color: var(--bad); font-weight: 900; white-space: nowrap; }
+
 #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 70; }
 
 @media (prefers-reduced-motion: reduce) {
