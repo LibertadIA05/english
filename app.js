@@ -22,7 +22,11 @@
     'the bill': ['the check'], 'shop': ['store'], 'straight on': ['straight', 'straight ahead'], 'movie': ['film'],
     'booking': ['reservation'], 'late': ['delayed'], 'suitcase': ['luggage'], 'cheap': ['not expensive'],
     'weather': [], 'hungry': ['starving'], 'friend': [], 'favourite': ['favorite'],
-    'to be afraid': ['to be scared'], 'to be in a hurry': ['to be in a rush'], 'to be sleepy': ['to be tired'], 'to be fed up': ['to be sick of it']
+    'to be afraid': ['to be scared'], 'to be in a hurry': ['to be in a rush'], 'to be sleepy': ['to be tired'], 'to be fed up': ['to be sick of it'],
+    'flat': ['apartment'], 'trousers': ['pants'], 'holiday': ['vacation'], 'sweater': ['jumper', 'pullover'], 'ill': ['sick'],
+    'fridge': ['refrigerator'], 'sofa': ['couch'], 'changing room': ['fitting room'], 'scared': ['afraid', 'frightened'],
+    'medicine': ['medication'], 'maybe': ['perhaps'], 'fast': ['quick'], 'kind': ['nice'], 'living room': ['lounge', 'sitting room'],
+    'customer': ['client'], 'to tidy': ['to tidy up'], 'tall': ['big'], 'quiet': ['calm']
   };
 
   const LEVEL_DEFS = [
@@ -90,7 +94,14 @@
   /* ---------- Normalisation & correction tolérante ---------- */
   const NUM = { 0: 'zero', 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine', 10: 'ten', 11: 'eleven', 12: 'twelve', 13: 'thirteen', 14: 'fourteen', 15: 'fifteen', 16: 'sixteen', 17: 'seventeen', 18: 'eighteen', 19: 'nineteen', 20: 'twenty', 30: 'thirty', 40: 'forty', 50: 'fifty', 60: 'sixty', 70: 'seventy', 80: 'eighty', 90: 'ninety' };
   const ORD = { 1: 'first', 2: 'second', 3: 'third', 4: 'fourth', 5: 'fifth' };
-  const SPELL = { colour: 'color', favourite: 'favorite', grey: 'gray', theatre: 'theater', centre: 'center', okay: 'ok', mum: 'mom' };
+  const SPELL = {
+    colour: 'color', colours: 'colors', favourite: 'favorite', favourites: 'favorites', grey: 'gray', theatre: 'theater', centre: 'center',
+    okay: 'ok', mum: 'mom', neighbour: 'neighbor', neighbours: 'neighbors', cancelled: 'canceled', cancelling: 'canceling',
+    travelling: 'traveling', travelled: 'traveled', traveller: 'traveler', organise: 'organize', organised: 'organized',
+    realise: 'realize', realised: 'realized', apologise: 'apologize', apologised: 'apologized', programme: 'program',
+    behaviour: 'behavior', flavour: 'flavor', humour: 'humor', jewellery: 'jewelry', pyjamas: 'pajamas', licence: 'license',
+    metre: 'meter', metres: 'meters', litre: 'liter', litres: 'liters', recognise: 'recognize', practise: 'practice', cheque: 'check'
+  };
 
   function norm(s) {
     s = String(s || '').toLowerCase().replace(/[’‘`´ʼ]/g, "'");
@@ -99,6 +110,7 @@
       .replace(/n't\b/g, ' not').replace(/\bi'm\b/g, 'i am').replace(/'re\b/g, ' are')
       .replace(/\b(he|she|it|that|what|where|there|who|how|here|when|this)'s\b/g, '$1 is')
       .replace(/'ll\b/g, ' will').replace(/'ve\b/g, ' have').replace(/'d\b/g, ' would').replace(/\blet's\b/g, 'let us');
+    s = s.replace(/\be-mail/g, 'email').replace(/\bwi-fi\b/g, 'wifi');
     s = s.replace(/[^a-z0-9']+/g, ' ').replace(/'/g, '');
     return s.split(' ').filter(Boolean).map(t => NUM[t] || SPELL[t] || t).join(' ');
   }
