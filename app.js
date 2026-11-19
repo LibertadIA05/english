@@ -26,7 +26,10 @@
     'flat': ['apartment'], 'trousers': ['pants'], 'holiday': ['vacation'], 'sweater': ['jumper', 'pullover'], 'ill': ['sick'],
     'fridge': ['refrigerator'], 'sofa': ['couch'], 'changing room': ['fitting room'], 'scared': ['afraid', 'frightened'],
     'medicine': ['medication'], 'maybe': ['perhaps'], 'fast': ['quick'], 'kind': ['nice'], 'living room': ['lounge', 'sitting room'],
-    'customer': ['client'], 'to tidy': ['to tidy up'], 'tall': ['big'], 'quiet': ['calm']
+    'customer': ['client'], 'to tidy': ['to tidy up'], 'tall': ['big'], 'quiet': ['calm'],
+    'luggage': ['baggage'], 'survey': ['poll'], 'to find out': ['to discover'], 'to count on': ['to rely on'],
+    'to look after': ['to take care of'], 'to bring up': ['to raise'], 'car rental': ['car hire'], 'actually': ['in fact'],
+    'opportunity': ['chance'], 'waste': ['rubbish', 'garbage', 'trash']
   };
 
   const LEVEL_DEFS = [
@@ -149,12 +152,21 @@
     return [...new Set(list.map(norm))];
   }
 
+  // « she's » peut vouloir dire she is ou she has, « I'd » I would ou I had : on teste chaque lecture
+  function readings(text) {
+    const t = String(text || '').replace(/[’‘`´ʼ]/g, "'");
+    const out = new Set([norm(t)]);
+    if (/'s\b/i.test(t)) out.add(norm(t.replace(/\b(he|she|it|that|what|where|there|who|how|here|when|this)'s\b/gi, '$1 has')));
+    if (/'d\b/i.test(t)) out.add(norm(t.replace(/'d\b/gi, ' had')));
+    return [...out].filter(Boolean);
+  }
+
   function checkText(text, it, allowTypo) {
-    const u = norm(text);
-    if (!u) return { ok: false };
+    const us = readings(text);
+    if (!us.length) return { ok: false };
     const acc = accepted(it), main = norm(it.en);
-    if (acc.includes(u)) return { ok: true, alt: u !== main && it.kind === 's' };
-    if (allowTypo) for (const a of acc) if (typoMatch(u, a)) return { ok: true, typo: true };
+    for (const u of us) if (acc.includes(u)) return { ok: true, alt: u !== main && it.kind === 's' };
+    if (allowTypo) for (const u of us) for (const a of acc) if (typoMatch(u, a)) return { ok: true, typo: true };
     return { ok: false };
   }
 
