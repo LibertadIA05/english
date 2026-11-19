@@ -29,7 +29,11 @@
     'customer': ['client'], 'to tidy': ['to tidy up'], 'tall': ['big'], 'quiet': ['calm'],
     'luggage': ['baggage'], 'survey': ['poll'], 'to find out': ['to discover'], 'to count on': ['to rely on'],
     'to look after': ['to take care of'], 'to bring up': ['to raise'], 'car rental': ['car hire'], 'actually': ['in fact'],
-    'opportunity': ['chance'], 'waste': ['rubbish', 'garbage', 'trash']
+    'opportunity': ['chance'], 'waste': ['rubbish', 'garbage', 'trash'],
+    'to be hot': ['to be warm'], 'last night': ['yesterday evening'], 'colleague': ['coworker'], 'company': ['firm', 'business'],
+    'salary': ['wage', 'pay'], 'fever': ['temperature'], 'pharmacy': ['chemist', "chemist's", 'drugstore'], 'stairs': ['staircase'],
+    'trip': ['journey'], 'to book': ['to reserve'], 'countryside': ['country'], 'to move': ['to move house'], 'difficult': ['hard'],
+    'noisy': ['loud'], 'phone': ['telephone', 'mobile'], 'to call': ['to phone', 'to ring'], 'angry': ['mad', 'cross']
   };
 
   const LEVEL_DEFS = [

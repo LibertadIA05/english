@@ -5,7 +5,7 @@
 
 window.COURSE_A2 = [
   {
-    id: "a2u0", emoji: "🎯", title: "Tes pièges à éviter", subtitle: "D'après tes erreurs du niveau A1", color: "#E0393E",
+    id: "a2u0", emoji: "🪤", title: "Tes pièges à éviter", subtitle: "D'après tes erreurs du niveau A1", color: "#E0393E",
     vocab: [
       ["to be hungry", "avoir faim", "😋"],
       ["to be thirsty", "avoir soif", "🥤"],
@@ -24,13 +24,13 @@ window.COURSE_A2 = [
       ["She is thirty years old.", "Elle a trente ans.", ["She is thirty."]],
       ["Are you thirsty?", "As-tu soif ?", []],
       ["You are right, it is too late.", "Tu as raison, il est trop tard.", []],
-      ["My son is afraid of dogs.", "Mon fils a peur des chiens.", ["My son is scared of dogs."]],
+      ["My son is afraid of dogs.", "Mon fils a peur des chiens.", ["My son is scared of dogs.", "My son is frightened of dogs."]],
       ["We are lucky today.", "Nous avons de la chance aujourd'hui.", ["Today we are lucky."]],
       ["I get up at seven in the morning.", "Je me lève à sept heures du matin.", ["I get up at seven o'clock in the morning.", "I wake up at seven in the morning.", "I wake up at seven o'clock in the morning."]],
-      ["We go to the market on Saturday morning.", "Nous allons au marché le samedi matin.", ["We go to the market on Saturday mornings."]],
+      ["We go to the market on Saturday morning.", "Nous allons au marché le samedi matin.", ["We go to the market on Saturday mornings.", "We go to the market every Saturday morning.", "On Saturday mornings we go to the market.", "Every Saturday morning we go to the market."]],
       ["My mother works in a hospital.", "Ma mère travaille dans un hôpital.", ["My mother works at a hospital.", "My mom works in a hospital.", "My mom works at a hospital."]],
-      ["Does your brother like cooking?", "Est-ce que ton frère aime cuisiner ?", ["Does your brother like to cook?", "Does your brother love cooking?", "Does your brother love to cook?"]],
-      ["I am cold, can you close the window?", "J'ai froid, tu peux fermer la fenêtre ?", ["I am cold, could you close the window?"]]
+      ["Does your brother like cooking?", "Est-ce que ton frère aime cuisiner ?", ["Does your brother like to cook?", "Does your brother love cooking?", "Does your brother love to cook?", "Does your brother enjoy cooking?"]],
+      ["I am cold, can you close the window?", "J'ai froid, tu peux fermer la fenêtre ?", ["I am cold, could you close the window?", "I am cold, can you shut the window?", "I am cold, could you shut the window?"]]
     ],
     blanks: [
       ["She ___ forty years old.", "is", ["is", "has", "have", "are"], "Elle a quarante ans.", "L'âge se dit avec be : she is forty. Jamais has.", "L'âge (be + old)"],
@@ -57,19 +57,19 @@ window.COURSE_A2 = [
       ["to meet", "rencontrer", "🤝"],
       ["to buy", "acheter", "🛍️"],
       ["to relax", "se détendre", "🧘"],
-      ["to win", "gagner", "🏆"]
+      ["to win", "gagner (un match)", "🏆"]
     ],
     sentences: [
       ["We went to the beach on Saturday.", "Nous sommes allés à la plage samedi.", ["We went to the beach last Saturday.", "We went to the beach Saturday.", "On Saturday we went to the beach.", "Last Saturday we went to the beach."]],
-      ["I saw a good film last night.", "J'ai vu un bon film hier soir.", ["I saw a good movie last night.", "I saw a good film yesterday evening.", "I saw a good movie yesterday evening.", "I watched a good film last night.", "I watched a good movie last night.", "Last night I saw a good film.", "Last night I saw a good movie.", "Yesterday evening I saw a good film.", "Yesterday evening I saw a good movie."]],
+      ["I saw a good film last night.", "J'ai vu un bon film hier soir.", ["I saw a good movie last night.", "I saw a good film yesterday evening.", "I saw a good movie yesterday evening.", "I watched a good film last night.", "I watched a good movie last night.", "Last night I saw a good film.", "Last night I saw a good movie.", "Yesterday evening I saw a good film.", "Yesterday evening I saw a good movie.", "I watched a good film yesterday evening.", "I watched a good movie yesterday evening.", "Last night I watched a good film.", "Last night I watched a good movie."]],
       ["Did you have a good weekend?", "Tu as passé un bon week-end ?", ["Did you have a nice weekend?", "Have you had a good weekend?", "Have you had a nice weekend?"]],
       ["We ate at a good restaurant yesterday.", "Nous avons mangé dans un bon restaurant hier.", ["We ate in a good restaurant yesterday.", "We ate at a nice restaurant yesterday.", "We ate in a nice restaurant yesterday.", "Yesterday we ate at a good restaurant.", "Yesterday we ate in a good restaurant.", "Yesterday we ate at a nice restaurant.", "Yesterday we ate in a nice restaurant."]],
-      ["She bought a present for her mother.", "Elle a acheté un cadeau pour sa mère.", ["She bought a gift for her mother.", "She has bought a present for her mother.", "She has bought a gift for her mother.", "She bought her mother a present.", "She bought her mother a gift.", "She has bought her mother a present.", "She has bought her mother a gift."]],
+      ["She bought a present for her mother.", "Elle a acheté un cadeau pour sa mère.", ["She bought a gift for her mother.", "She has bought a present for her mother.", "She has bought a gift for her mother.", "She bought her mother a present.", "She bought her mother a gift.", "She has bought her mother a present.", "She has bought her mother a gift.", "She bought a present for her mom.", "She bought a gift for her mom.", "She bought her mom a present."]],
       ["The museum was closed on Monday.", "Le musée était fermé lundi.", ["The museum was closed last Monday.", "The museum was closed Monday.", "On Monday the museum was closed."]],
       ["Were you at home last night?", "Tu étais à la maison hier soir ?", ["Were you home last night?", "Were you at home yesterday evening?", "Were you home yesterday evening?"]],
       ["What did you do yesterday?", "Qu'est-ce que tu as fait hier ?", []],
       ["We had a good time at the party.", "On s'est bien amusés à la fête.", ["We had a great time at the party.", "We had a nice time at the party.", "We had fun at the party.", "We had a lot of fun at the party.", "We had great fun at the party.", "We enjoyed ourselves at the party."]],
-      ["I forgot my keys at home.", "J'ai oublié mes clés à la maison.", ["I have forgotten my keys at home.", "I left my keys at home.", "I have left my keys at home."]]
+      ["I left my keys at home.", "J'ai oublié mes clés à la maison.", ["I have left my keys at home.", "I forgot my keys at home.", "I have forgotten my keys at home."]]
     ],
     blanks: [
       ["Last summer we ___ to London.", "went", ["went", "go", "goes", "gone"], "L'été dernier, nous sommes allés à Londres.", "go est irrégulier : au passé, on dit went (à toutes les personnes).", "Passé simple irrégulier"],
@@ -84,7 +84,7 @@ window.COURSE_A2 = [
     id: "a2u2", emoji: "💼", title: "Au travail", subtitle: "Métiers, bureau et collègues", color: "#3B82F6",
     vocab: [
       ["job", "emploi", "💼"],
-      ["office", "bureau", "🏢"],
+      ["office", "bureau (lieu de travail)", "🏢"],
       ["colleague", "collègue", "👥"],
       ["boss", "patron", "🧑‍💼"],
       ["meeting", "réunion", "📊"],
@@ -92,21 +92,21 @@ window.COURSE_A2 = [
       ["company", "entreprise", "🏭"],
       ["computer", "ordinateur", "💻"],
       ["customer", "client", "🛎️"],
-      ["teacher", "professeur", "👩‍🏫"],
+      ["teacher", "professeur (à l'école)", "👩‍🏫"],
       ["engineer", "ingénieur", "👷"],
       ["day off", "jour de congé", "🏝️"]
     ],
     sentences: [
-      ["What do you do for a living?", "Qu'est-ce que tu fais dans la vie ?", ["What do you do?", "What is your job?"]],
+      ["What do you do for a living?", "Qu'est-ce que tu fais dans la vie ?", ["What do you do?", "What is your job?", "What job do you do?"]],
       ["I work for a big company.", "Je travaille pour une grande entreprise.", ["I work for a large company.", "I work in a big company.", "I work in a large company.", "I work at a big company.", "I work at a large company."]],
       ["My office is on the third floor.", "Mon bureau est au troisième étage.", []],
       ["We have a meeting at ten o'clock.", "Nous avons une réunion à dix heures.", ["We have a meeting at ten.", "We have got a meeting at ten o'clock.", "We have got a meeting at ten."]],
       ["She is working from home today.", "Elle travaille de chez elle aujourd'hui.", ["She is working at home today.", "She works from home today.", "She works at home today.", "Today she is working from home.", "Today she is working at home."]],
       ["My colleagues are very friendly.", "Mes collègues sont très sympas.", ["My colleagues are very nice.", "My coworkers are very friendly.", "My coworkers are very nice."]],
       ["I have to finish this report today.", "Je dois finir ce rapport aujourd'hui.", ["I must finish this report today.", "I need to finish this report today.", "I have got to finish this report today.", "Today I have to finish this report.", "Today I must finish this report.", "Today I need to finish this report."]],
-      ["He started his new job on Monday.", "Il a commencé son nouveau travail lundi.", ["He started his new job last Monday.", "He started his new job Monday.", "He began his new job on Monday.", "He began his new job last Monday.", "He began his new job Monday.", "On Monday he started his new job."]],
+      ["He started his new job on Monday.", "Il a commencé son nouveau travail lundi.", ["He started his new job last Monday.", "He started his new job Monday.", "He began his new job on Monday.", "He began his new job last Monday.", "He began his new job Monday.", "On Monday he started his new job.", "On Monday he began his new job.", "Last Monday he started his new job."]],
       ["Can I take a day off on Friday?", "Je peux prendre un jour de congé vendredi ?", ["Can I take a day off Friday?", "Can I have a day off on Friday?", "Could I take a day off on Friday?", "Could I have a day off on Friday?", "May I take a day off on Friday?", "May I have a day off on Friday?", "Can I take Friday off?"]],
-      ["The boss is in a meeting.", "Le patron est en réunion.", []]
+      ["The boss is in a meeting.", "Le patron est en réunion.", ["The boss is at a meeting."]]
     ],
     blanks: [
       ["She is ___ engineer.", "an", ["an", "a", "some", "any"], "Elle est ingénieure.", "Devant un métier, on met a / an. Devant un son voyelle (engineer) : an.", "Articles (a / an)"],
@@ -130,7 +130,7 @@ window.COURSE_A2 = [
       ["cough", "toux", "😷"],
       ["medicine", "médicament", "💊"],
       ["pharmacy", "pharmacie", "⚕️"],
-      ["appointment", "rendez-vous", "📅"],
+      ["appointment", "rendez-vous (chez le médecin)", "📅"],
       ["ill", "malade", "🛌"]
     ],
     sentences: [
@@ -139,7 +139,7 @@ window.COURSE_A2 = [
       ["I would like to make an appointment.", "Je voudrais prendre rendez-vous.", ["I would like to book an appointment.", "I would like an appointment."]],
       ["You should stay in bed for two days.", "Vous devriez rester au lit pendant deux jours.", ["You ought to stay in bed for two days."]],
       ["Take this medicine three times a day.", "Prenez ce médicament trois fois par jour.", ["Take this medication three times a day.", "Take this medicine three times per day.", "Take this medication three times per day."]],
-      ["I don't feel very well today.", "Je ne me sens pas très bien aujourd'hui.", ["I am not feeling very well today.", "Today I don't feel very well.", "Today I am not feeling very well."]],
+      ["I don't feel very well today.", "Je ne me sens pas très bien aujourd'hui.", ["I am not feeling very well today.", "Today I don't feel very well.", "Today I am not feeling very well.", "I don't feel very good today.", "I am not feeling very good today."]],
       ["Do you have something for a cough?", "Vous avez quelque chose contre la toux ?", ["Do you have anything for a cough?", "Have you got something for a cough?", "Have you got anything for a cough?"]],
       ["My son has a high temperature.", "Mon fils a beaucoup de fièvre.", ["My son has a high fever.", "My son has got a high temperature.", "My son has got a high fever."]],
       ["I broke my arm last year.", "Je me suis cassé le bras l'année dernière.", ["Last year I broke my arm."]],
@@ -157,7 +157,7 @@ window.COURSE_A2 = [
   {
     id: "a2u4", emoji: "🏡", title: "La maison", subtitle: "Pièces, meubles et tâches ménagères", color: "#EF4444",
     vocab: [
-      ["kitchen", "cuisine", "🍳"],
+      ["kitchen", "cuisine (la pièce)", "🍳"],
       ["bathroom", "salle de bains", "🛁"],
       ["living room", "salon", "📺"],
       ["sofa", "canapé", "🛋️"],
@@ -200,10 +200,10 @@ window.COURSE_A2 = [
       ["shoes", "chaussures", "👞"],
       ["jacket", "veste", "🧥"],
       ["sweater", "pull", "🧶"],
-      ["size", "taille", "📏"],
+      ["size", "taille (d'un vêtement)", "📏"],
       ["changing room", "cabine d'essayage", "🚪"],
-      ["to try on", "essayer", "🪞"],
-      ["to wear", "porter", "🧣"],
+      ["to try on", "essayer (un vêtement)", "🪞"],
+      ["to wear", "porter (un vêtement)", "🧣"],
       ["receipt", "ticket de caisse", "🧾"],
       ["refund", "remboursement", "🔄"]
     ],
@@ -216,7 +216,7 @@ window.COURSE_A2 = [
       ["I would like to return these shoes.", "Je voudrais rendre ces chaussures.", ["I would like to take these shoes back.", "I would like to take back these shoes.", "I would like to bring these shoes back.", "I would like to bring back these shoes."]],
       ["Can I have a refund, please?", "Je peux me faire rembourser, s'il vous plaît ?", ["Can I get a refund, please?", "Could I have a refund, please?", "Could I get a refund, please?", "May I have a refund, please?", "Can I be refunded, please?", "Could I be refunded, please?"]],
       ["Have you got the receipt?", "Vous avez le ticket de caisse ?", ["Do you have the receipt?"]],
-      ["She is wearing a beautiful red dress.", "Elle porte une belle robe rouge.", ["She is wearing a lovely red dress.", "She is wearing a pretty red dress."]],
+      ["She is wearing a beautiful red dress today.", "Elle porte une belle robe rouge aujourd'hui.", ["She is wearing a lovely red dress today.", "She is wearing a pretty red dress today.", "She is wearing a nice red dress today.", "Today she is wearing a beautiful red dress.", "Today she is wearing a lovely red dress.", "Today she is wearing a pretty red dress.", "Today she is wearing a nice red dress."]],
       ["This shirt doesn't fit me.", "Cette chemise ne me va pas.", ["This shirt doesn't suit me."]]
     ],
     blanks: [
@@ -233,7 +233,7 @@ window.COURSE_A2 = [
     vocab: [
       ["holiday", "vacances", "🌴"],
       ["trip", "voyage", "🚆"],
-      ["plan", "projet", "📝"],
+      ["plan", "projet (ce qu'on prévoit de faire)", "📝"],
       ["to book", "réserver", "📲"],
       ["next", "prochain", "⏭️"],
       ["soon", "bientôt", "🔜"],
@@ -245,13 +245,13 @@ window.COURSE_A2 = [
       ["maybe", "peut-être", "🤔"]
     ],
     sentences: [
-      ["I am going to visit my aunt next week.", "Je vais rendre visite à ma tante la semaine prochaine.", ["I am going to see my aunt next week.", "I will visit my aunt next week.", "I will see my aunt next week.", "I am visiting my aunt next week.", "I am seeing my aunt next week.", "Next week I am going to visit my aunt.", "Next week I am going to see my aunt."]],
+      ["I am going to visit my aunt next week.", "Je vais rendre visite à ma tante la semaine prochaine.", ["I am going to see my aunt next week.", "I will visit my aunt next week.", "I will see my aunt next week.", "I am visiting my aunt next week.", "I am seeing my aunt next week.", "Next week I am going to visit my aunt.", "Next week I am going to see my aunt.", "Next week I will visit my aunt.", "Next week I will see my aunt."]],
       ["We are going to spend a week in the mountains.", "Nous allons passer une semaine à la montagne.", ["We are going to spend one week in the mountains.", "We will spend a week in the mountains.", "We are spending a week in the mountains."]],
       ["What are you going to do this summer?", "Qu'est-ce que tu vas faire cet été ?", ["What will you do this summer?", "What are you doing this summer?"]],
       ["I think it will rain tomorrow.", "Je pense qu'il va pleuvoir demain.", ["I think it is going to rain tomorrow.", "I think that it will rain tomorrow.", "I think that it is going to rain tomorrow."]],
-      ["I will call you when I arrive.", "Je t'appellerai quand j'arriverai.", ["I will phone you when I arrive.", "I will ring you when I arrive."]],
+      ["I will call you when I arrive.", "Je t'appellerai quand j'arriverai.", ["I will phone you when I arrive.", "I will ring you when I arrive.", "I will call you when I get there.", "I will phone you when I get there."]],
       ["We have already booked the hotel.", "Nous avons déjà réservé l'hôtel.", ["We already booked the hotel.", "We have already reserved the hotel.", "We already reserved the hotel."]],
-      ["Maybe I will move to London next year.", "Je déménagerai peut-être à Londres l'année prochaine.", ["I will maybe move to London next year.", "Perhaps I will move to London next year.", "I might move to London next year.", "I may move to London next year."]],
+      ["Maybe I will move to London next year.", "Je déménagerai peut-être à Londres l'année prochaine.", ["I will maybe move to London next year.", "Perhaps I will move to London next year.", "I might move to London next year.", "I may move to London next year.", "Next year I might move to London.", "Maybe I am going to move to London next year."]],
       ["Are you going to take the train?", "Tu vas prendre le train ?", ["Will you take the train?", "Are you taking the train?"]],
       ["I hope to go abroad next summer.", "J'espère partir à l'étranger l'été prochain.", ["I hope to travel abroad next summer.", "I hope I can go abroad next summer.", "Next summer I hope to go abroad."]],
       ["Don't worry, I will help you.", "Ne t'inquiète pas, je vais t'aider.", ["Don't worry, I am going to help you."]]
@@ -270,7 +270,7 @@ window.COURSE_A2 = [
     vocab: [
       ["fast", "rapide", "🏎️"],
       ["slow", "lent", "🐢"],
-      ["tall", "grand", "🦒"],
+      ["tall", "grand (en hauteur)", "🦒"],
       ["heavy", "lourd", "🏋️"],
       ["young", "jeune", "🧒"],
       ["old", "vieux", "👴"],
@@ -278,8 +278,8 @@ window.COURSE_A2 = [
       ["difficult", "difficile", "🧗"],
       ["quiet", "calme", "🤫"],
       ["noisy", "bruyant", "📢"],
-      ["better", "meilleur", "📈"],
-      ["worse", "pire", "📉"]
+      ["better", "meilleur (que…)", "📈"],
+      ["worse", "pire (que…)", "📉"]
     ],
     sentences: [
       ["My brother is taller than me.", "Mon frère est plus grand que moi.", ["My brother is taller than I am."]],
@@ -288,7 +288,7 @@ window.COURSE_A2 = [
       ["London is bigger than Paris.", "Londres est plus grand que Paris.", ["London is larger than Paris."]],
       ["English is easier than French.", "L'anglais est plus facile que le français.", []],
       ["It is the most beautiful city in the world.", "C'est la plus belle ville du monde.", ["This is the most beautiful city in the world.", "That is the most beautiful city in the world.", "It is the most beautiful town in the world.", "This is the most beautiful town in the world."]],
-      ["My sister is not as tall as me.", "Ma sœur n'est pas aussi grande que moi.", ["My sister is not as tall as I am.", "My sister is not so tall as me."]],
+      ["My sister is not as tall as me.", "Ma sœur n'est pas aussi grande que moi.", ["My sister is not as tall as I am.", "My sister is not so tall as me.", "My sister is not so tall as I am."]],
       ["Which is the cheapest hotel?", "Quel est l'hôtel le moins cher ?", ["Which hotel is the cheapest?", "What is the cheapest hotel?", "Which is the least expensive hotel?", "Which hotel is the least expensive?", "What is the least expensive hotel?"]],
       ["Your English is better than mine.", "Ton anglais est meilleur que le mien.", []],
       ["This is the worst day of my life!", "C'est le pire jour de ma vie !", ["It is the worst day of my life!", "That is the worst day of my life!", "This is the worst day in my life!", "It is the worst day in my life!"]]
@@ -309,7 +309,7 @@ window.COURSE_A2 = [
       ["message", "message", "💬"],
       ["email", "e-mail", "📧"],
       ["to call", "appeler", "📞"],
-      ["to answer", "répondre", "🙋"],
+      ["to answer", "répondre (au téléphone)", "🙋"],
       ["to send", "envoyer", "📤"],
       ["number", "numéro", "#️⃣"],
       ["battery", "batterie", "🔋"],
@@ -324,9 +324,9 @@ window.COURSE_A2 = [
       ["She isn't here at the moment.", "Elle n'est pas là pour le moment.", ["She is not here right now.", "She is not in at the moment.", "She is not in right now."]],
       ["Would you like to leave a message?", "Voulez-vous laisser un message ?", ["Do you want to leave a message?"]],
       ["I will call you back later.", "Je te rappelle plus tard.", ["I will phone you back later.", "I will ring you back later.", "I am going to call you back later."]],
-      ["Sorry, I can't hear you very well.", "Désolé, je ne t'entends pas très bien.", []],
+      ["Sorry, I can't hear you very well.", "Désolé, je ne t'entends pas très bien.", ["I am sorry, I can't hear you very well."]],
       ["My battery is almost dead.", "Ma batterie est presque vide.", ["My battery is nearly dead.", "My battery is almost empty.", "My battery is nearly empty.", "My battery is almost flat.", "My battery is nearly flat."]],
-      ["I sent you an email this morning.", "Je t'ai envoyé un e-mail ce matin.", ["I have sent you an email this morning.", "I sent an email to you this morning.", "I have sent an email to you this morning.", "I emailed you this morning."]],
+      ["I sent you an email this morning.", "Je t'ai envoyé un e-mail ce matin.", ["I have sent you an email this morning.", "I sent an email to you this morning.", "I have sent an email to you this morning.", "I emailed you this morning.", "This morning I sent you an email."]],
       ["Can you send me your phone number?", "Tu peux m'envoyer ton numéro de téléphone ?", ["Could you send me your phone number?", "Can you send me your telephone number?", "Could you send me your telephone number?"]],
       ["I need to cancel my appointment.", "Je dois annuler mon rendez-vous.", ["I have to cancel my appointment.", "I must cancel my appointment."]]
     ],
@@ -343,8 +343,8 @@ window.COURSE_A2 = [
     id: "a2u9", emoji: "🥂", title: "Sorties et invitations", subtitle: "Inviter, accepter, refuser poliment", color: "#EC4899",
     vocab: [
       ["invitation", "invitation", "💌"],
-      ["birthday", "anniversaire", "🎂"],
-      ["wedding", "mariage", "💒"],
+      ["birthday", "anniversaire (de naissance)", "🎂"],
+      ["wedding", "mariage (la cérémonie)", "💒"],
       ["dinner", "dîner", "🍝"],
       ["theatre", "théâtre", "🎭"],
       ["show", "spectacle", "🎪"],
@@ -361,11 +361,11 @@ window.COURSE_A2 = [
       ["I'd love to, thank you!", "Avec plaisir, merci !", ["I would love to, thanks!", "With pleasure, thank you!", "With pleasure, thanks!"]],
       ["Sorry, I can't, I'm busy that day.", "Désolé, je ne peux pas, je suis occupé ce jour-là.", ["Sorry, I can't, I am busy on that day."]],
       ["Let's go to the theatre tonight!", "Allons au théâtre ce soir !", ["Let's go to the theatre this evening!"]],
-      ["Shall we meet in front of the cinema?", "On se retrouve devant le cinéma ?", ["Shall we meet outside the cinema?", "Should we meet in front of the cinema?", "Should we meet outside the cinema?"]],
+      ["Shall we meet in front of the cinema?", "On se retrouve devant le cinéma ?", ["Shall we meet outside the cinema?", "Should we meet in front of the cinema?", "Should we meet outside the cinema?", "Shall we meet in front of the movie theater?", "Shall we meet outside the movie theater?"]],
       ["Thank you for inviting me.", "Merci de m'avoir invité.", ["Thanks for inviting me.", "Thank you for the invitation.", "Thanks for the invitation."]],
       ["What time does the film start?", "À quelle heure commence le film ?", ["What time does the movie start?", "What time does the film begin?", "What time does the movie begin?", "When does the film start?", "When does the movie start?", "When does the film begin?", "When does the movie begin?"]],
       ["Unfortunately, I have other plans.", "Malheureusement, j'ai d'autres projets.", ["Unfortunately, I have got other plans."]],
-      ["Why don't we have dinner together?", "Et si on dînait ensemble ?", ["Shall we have dinner together?", "How about having dinner together?", "What about having dinner together?"]]
+      ["Why don't we have dinner together?", "Et si on dînait ensemble ?", ["Shall we have dinner together?", "How about having dinner together?", "What about having dinner together?", "How about we have dinner together?"]]
     ],
     blanks: [
       ["Would you like ___ to the cinema?", "to come", ["to come", "come", "coming", "came"], "Ça te dirait de venir au cinéma ?", "Would you like + to + verbe ?", "Gérondif / infinitif"],
