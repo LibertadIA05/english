@@ -21,7 +21,8 @@
     'mother': ['mom', 'mum'], 'father': ['dad'], 'children': ['kids'], 'grandmother': ['grandma', 'granny'],
     'the bill': ['the check'], 'shop': ['store'], 'straight on': ['straight', 'straight ahead'], 'movie': ['film'],
     'booking': ['reservation'], 'late': ['delayed'], 'suitcase': ['luggage'], 'cheap': ['not expensive'],
-    'weather': [], 'hungry': ['starving'], 'friend': [], 'favourite': ['favorite']
+    'weather': [], 'hungry': ['starving'], 'friend': [], 'favourite': ['favorite'],
+    'to be afraid': ['to be scared'], 'to be in a hurry': ['to be in a rush'], 'to be sleepy': ['to be tired'], 'to be fed up': ['to be sick of it']
   };
 
   const LEVEL_DEFS = [
@@ -183,7 +184,7 @@
       settings: { goal: 30, sound: true, vibe: true, anim: true, accent: 'en-US', slow: false, speak: true, theme: 'auto' },
       mute: { listen: 0, speak: 0 },
       notice: null, installTip: false,
-      level: 'a1', unlocked: {}, log: []
+      level: null, unlocked: {}, log: []
     };
   }
   function mergeState(d, o) {
@@ -521,7 +522,7 @@
       h += `<section class="card hero">
         <div class="eyebrow">${first ? 'Bienvenue 👋' : 'Continuer'}</div>
         <div class="row"><div class="big-emoji" aria-hidden="true">${u.emoji}</div><div><h2>${esc(u.title)}</h2><div class="sub">Niveau ${L.name} · Unité ${u.num + 1} · ${esc(nl.name)}</div></div></div>
-        ${first ? '<div class="sub">3 niveaux, 120 leçons de 5 minutes. Pas de vies, pas de pub : avance à ton rythme.</div>' : ''}
+        ${first ? `<div class="sub">${LEVELS.length} niveaux, ${LESSONS.length} leçons de 5 minutes. Pas de vies, pas de pub : avance à ton rythme.</div>` : ''}
         <button class="btn" data-act="start" data-l="${nl.idx}">${first ? 'Commencer' : 'Continuer'}</button>
       </section>`;
     } else {
@@ -610,7 +611,7 @@
       const prod = (it, k) => ({ t: D === 0 || (D === 1 && k % 2 === 0) || (D === 2 && k % 3 === 1) ? 'build' : 'type', item: it });
       const BL = it => (it ? [{ t: 'blank', item: it }] : []);
       seq.push(P(s[0]), P(s[1]), prod(s[0], 0), P(s[2]), prod(s[1], 1), ...BL(b[0]), P(s[3]), prod(s[2], 2),
-        P(s[4]), prod(s[3], 3), ...BL(b[1]), prod(s[4], 4), ...BL(b[2]));
+        P(s[4]), prod(s[3], 3), ...BL(b[1]), prod(s[4], 4), ...b.slice(2).map(it => ({ t: 'blank', item: it })));
       const short = s.slice().sort((a, c) => wc(a.en) - wc(c.en));
       const sp = { t: 'speak', item: pick1(short.slice(0, 3)) };
       if (li === 2) {
@@ -1429,12 +1430,18 @@
         const d = JSON.parse(rd.result);
         if (!d || typeof d.xp !== 'number' || typeof d.done !== 'object') throw new Error('format');
         S = mergeState(defaults(), d);
-        save(); applyPrefs(); TTS.pickVoice();
+        autoLevel(); save(); applyPrefs(); TTS.pickVoice();
         toast('Progression restaurée ✅');
         show('settings');
       } catch (err) { toast("Ce fichier n'est pas une sauvegarde Tea Time."); }
     };
     rd.readAsText(f);
+  }
+  function autoLevel() {
+    if (LEVELS.some(L => L.id === S.level)) return;
+    const L = LEVELS.find(x => levelUnlocked(x.index) && !levelComplete(x.index)) || LEVELS[0];
+    S.level = L.id;
+    save();
   }
   function applyPrefs() {
     const r = document.documentElement;
@@ -1549,6 +1556,8 @@
   /* ================================================================
      Démarrage
      ================================================================ */
+  // Première ouverture après la mise à jour : on se place sur le premier niveau à continuer
+  autoLevel();
   applyPrefs();
   syncVH();
   refreshStreak();

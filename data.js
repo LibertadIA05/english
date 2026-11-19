@@ -106,7 +106,7 @@ window.COURSE_A1 = [
       ["This ___ my brother.", "is", ["is", "are", "am"], "Voici mon frère.", "This is = voici / c'est.", "Verbe be (am / is / are)"],
       ["I have ___ sister.", "a", ["a", "an", "two"], "J'ai une sœur.", "Devant un son consonne : a. Devant un son voyelle : an.", "Articles (a / an)"],
       ["___ name is Paul. He is my father.", "His", ["His", "Her", "Your"], "Il s'appelle Paul. C'est mon père.", "his = son / sa pour un homme, her = son / sa pour une femme.", "Possessifs (my / his / her)"],
-      ["My sister ___ two children.", "has", ["has", "have", "is"], "Ma sœur a deux enfants.", "Avec he / she / it : has (pas have).", "Verbe have"]
+      ["My sister ___ two children.", "has", ["has", "have", "is"], "Ma sœur a deux enfants.", "Avec he / she / it : has (pas have).", "Présent simple (-s à la 3e personne)"]
     ]
   },
   {
